@@ -21,3 +21,6 @@
 * create database 数据库名字，创建数据库
 * source .sql文件的目录，例如source /Users/liudong/Desktop/git/go/src/ziyoubiancheng/mbook/mbook.sql
 这个过程可以创建表
+
+### 项目运行
+* bee run main.go，使用go run无法还在beego中的默认配置(app.conf)
