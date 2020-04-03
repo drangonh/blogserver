@@ -1,12 +1,12 @@
 package controllers
 
 import (
+	"blogserver/models"
 	"fmt"
-	"github.com/astaxie/beego"
 )
 
 type MainController struct {
-	beego.Controller
+	BaseController
 }
 
 func (c *MainController) Get() {
@@ -19,4 +19,5 @@ func (c *MainController) Hi() {
 	fmt.Println("hello go")
 	c.Data["Website"] = "beego.me000"
 	c.TplName = "index.tpl"
+	models.PrintUsers()
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	_ "blogserver/routers"
+	_ "blogserver/sysinit"
 	"github.com/astaxie/beego"
 )
 
