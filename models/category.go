@@ -33,12 +33,12 @@ func (m *Category) GetCates(pid int, status int) (cates []Category, err error) {
 }
 
 ////查询分类
-//func (m *Category) Find(id int) (cate Category) {
-//	cate.Id = id
-//	orm.NewOrm().Read(&cate)
-//	return cate
-//}
-//
+func (m *Category) Find(id int) (cate Category) {
+	cate.Id = id
+	orm.NewOrm().Read(&cate)
+	return cate
+}
+
 ////批量新增分类
 //func (m *Category) InsertMulti(pid int, cates string) (err error) {
 //	slice := strings.Split(cates, "\n")

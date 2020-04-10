@@ -29,7 +29,7 @@ func registerFunctions() {
 			return cdn + string(p[1:])
 		}
 
-		return cdn
+		return cdn + p
 	})
 
 	beego.AddFuncMap("cdncss", func(p string) string {
