@@ -12,9 +12,7 @@ import "github.com/astaxie/beego/orm"
 
 func init() {
 	orm.RegisterModel(
-		new(Category),
-		new(Book),
-		new(BookCategory),
+		new(User),
 	)
 }
 
@@ -22,18 +20,6 @@ func init() {
 * Table Names
 * */
 
-func TNCategory() string {
-	return "md_category"
-}
-
-func TNBookCategory() string {
-	return "md_book_category"
-}
-
-func TNBook() string {
-	return "md_books"
-}
-
-func TNMember() string {
-	return "md_members"
+func TNUser() string {
+	return "user"
 }
