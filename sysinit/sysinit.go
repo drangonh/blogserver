@@ -9,6 +9,7 @@
 package sysinit
 
 import (
+	_ "blogserver/models"
 	"blogserver/utils"
 	"github.com/astaxie/beego"
 	"path/filepath"
@@ -16,6 +17,7 @@ import (
 )
 
 func sysInit() {
+
 	uploads := filepath.Join("/", "uploads")
 	beego.BConfig.WebConfig.StaticDir["uploads"] = uploads
 

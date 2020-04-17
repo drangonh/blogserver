@@ -1,12 +1,12 @@
 package controllers
 
-import "ceshi/models"
+import "blogserver/models"
 
 type UserController struct {
 	BaseController
 }
 
-func (c *UserController) Index2() string {
+func (u *UserController) Index2() string {
 	return "测试一下"
 }
 
@@ -20,7 +20,7 @@ func (c *UserController) Index2() string {
 func (u *UserController) Login() {
 	username := u.GetString("username")
 	password := u.GetString("password")
-	if models.Login(username, password) {
+	if _, err := models.NewUser().Login(username, password); err == nil {
 		u.Data["json"] = "login success"
 	} else {
 		u.Data["json"] = "user not exist"

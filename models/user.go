@@ -6,7 +6,7 @@ import (
 )
 
 type User struct {
-	UserId   int    `orm:"pk,auto" json:"userId"`
+	UserId   int    `orm:"pk;auto" json:"userId"`
 	Username string `orm:"size(30) unique" json:"userName"`
 	Password string `orm:"size(50) unique" json:"passWord"`
 }
@@ -22,7 +22,7 @@ func NewUser() *User {
 
 func (m *User) Login(userName, password string) (*User, error) {
 	member := &User{}
-	err := orm.NewOrm().QueryTable(m.TableName()).Filter("userName", userName).Filter("status", 0).One(member)
+	err := orm.NewOrm().QueryTable(m.TableName()).Filter("userName", userName).One(member)
 
 	if err != nil {
 		return member, errors.New("用户不存在")
@@ -33,3 +33,7 @@ func (m *User) Login(userName, password string) (*User, error) {
 	}
 	return member, errors.New("密码错误")
 }
+
+//func (m *User) GetAll() []User {
+//
+//}
