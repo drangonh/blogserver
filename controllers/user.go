@@ -22,11 +22,12 @@ func (u *UserController) Index2() string {
 // @Failure 403 user not exist
 // @router /login [get]
 func (u *UserController) Login() {
-	username := u.GetString("username")
-	password := u.GetString("password")
-	if user, err := models.NewUser().Login(username, password); err == nil {
+	userName := u.GetString("userName")
+	passWord := u.GetString("passWord")
+	if user, err := models.NewUser().Login(userName, passWord); err == nil {
 		u.Data["json"] = user
 	} else {
+		fmt.Println(err)
 		u.Data["json"] = err
 	}
 	u.ServeJSON()

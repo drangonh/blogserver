@@ -54,14 +54,11 @@ func (m *User) AddUser(add AddUser) error {
 	}
 
 	//start,查询账号是否存在
-	cond := orm.NewCondition().Or("userName", m.Username).Or("passWord", m.Password)
-
-	var one User
 	o := orm.NewOrm()
-	if o.QueryTable(m.TableName()).SetCond(cond).One(&one, "userName", "passWord"); one.UserId > 0 {
-		if m.Username == one.Username {
-			return errors.New("昵称已存在")
-		}
+	var user User
+	o.QueryTable(m.TableName()).Filter("userName", m.Username).One(&user)
+	if user.Username == m.Username {
+		return errors.New("用户名已存在")
 	}
 	//end
 
