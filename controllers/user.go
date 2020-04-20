@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"blogserver/models"
+	"blogserver/utils/common"
 	"encoding/json"
 	"fmt"
 )
@@ -25,10 +26,10 @@ func (u *UserController) Login() {
 	userName := u.GetString("userName")
 	passWord := u.GetString("passWord")
 	if user, err := models.NewUser().Login(userName, passWord); err == nil {
-		u.Data["json"] = user
+		u.Data["json"] = common.ResultHandle(user, nil)
 	} else {
-		fmt.Println(err)
-		u.Data["json"] = err
+		fmt.Println("登录错误", err)
+		u.Data["json"] = common.ResultHandle(nil, err)
 	}
 	u.ServeJSON()
 }

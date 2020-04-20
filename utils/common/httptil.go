@@ -217,3 +217,10 @@ func CrawlFile(filelink string, savefolder string, timeout ...int) (file string,
 	}
 	return
 }
+
+func ResultHandle(obj interface{}, err error) map[string]interface{} {
+	return map[string]interface{}{
+		"err":  err,
+		"data": obj,
+	}
+}
