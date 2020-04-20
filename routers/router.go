@@ -12,6 +12,6 @@ func init() {
 	//beego.Router("/explore", &controllers.ExploreController{}, "*:Index")
 
 	//登录、注册、修改用户资料
-	beego.Router("/login", &controllers.UserController{}, "post:Login")
+	beego.Router("/login", &controllers.UserController{}, "get:Login")
 	beego.Router("/register", &controllers.UserController{}, "post:Register")
 }
