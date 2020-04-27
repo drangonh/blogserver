@@ -1,6 +1,7 @@
 package models
 
 import (
+	"blogserver/utils"
 	"errors"
 	"github.com/astaxie/beego/orm"
 	"strings"
@@ -36,10 +37,13 @@ func (m *User) Login(userName, password string) (*User, error) {
 		return member, errors.New("用户不存在")
 	}
 
-	if member.Password == password {
-		return member, nil
+	res, err := utils.PasswordVerify(member.Password, password)
+
+	if res == false {
+		return member, errors.New("密码错误")
 	}
-	return member, errors.New("密码错误")
+
+	return member, nil
 }
 
 //注册账号
@@ -62,8 +66,13 @@ func (m *User) AddUser(add AddUser) error {
 	}
 	//end
 
+	hash, err := utils.PasswordHash(m.Password)
+	if err == nil {
+		m.Password = hash
+	}
+
 	//插入数据
-	_, err := o.Insert(m)
+	_, err = o.Insert(m)
 	if err != nil {
 		return err
 	}
