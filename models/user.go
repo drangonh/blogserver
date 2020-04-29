@@ -61,7 +61,6 @@ func (m *User) AddUser(add AddUser) (*User, error) {
 	o := orm.NewOrm()
 	var user User
 
-	fmt.Println(m)
 	o.QueryTable(m.TableName()).Filter("userName", m.Username).One(&user)
 	if user.Username == m.Username {
 		return nil, errors.New("用户名已存在")

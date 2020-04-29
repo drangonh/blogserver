@@ -25,3 +25,7 @@ func (m *Language) Edit() {
 	}
 	m.ServeJSON()
 }
+
+func (m *Language) GetLanguageList() {
+
+}
