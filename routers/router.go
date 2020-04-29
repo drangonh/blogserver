@@ -14,4 +14,8 @@ func init() {
 	//登录、注册、修改用户资料
 	beego.Router("/login", &controllers.UserController{}, "get:Login")
 	beego.Router("/register", &controllers.UserController{}, "post:Register")
+
+	// 编辑、发布文章
+	beego.Router("/editArticle", &controllers.MarkdownStore{}, "post:Edit")
+	beego.Router("/editLanguage", &controllers.Language{}, "post:Edit")
 }

@@ -3,14 +3,15 @@ package models
 import (
 	"blogserver/utils"
 	"errors"
+	"fmt"
 	"github.com/astaxie/beego/orm"
 	"strings"
 )
 
 type User struct {
-	UserId   int    `orm:"pk;auto" json:"userId"`
-	Username string `orm:"size(30) unique" json:"userName"`
-	Password string `orm:"size(50) unique" json:"passWord"`
+	UserId   int    `orm:"pk;auto;column(userId)" json:"userId"`
+	Username string `orm:"size(30),unique;column(userName)" json:"userName"`
+	Password string `orm:"size(50),unique;column(passWord)" json:"passWord"`
 }
 
 type AddUser struct {
@@ -42,27 +43,28 @@ func (m *User) Login(userName, password string) (*User, error) {
 	if res == false {
 		return member, errors.New("密码错误")
 	}
-
 	return member, nil
 }
 
 //注册账号
-func (m *User) AddUser(add AddUser) error {
+func (m *User) AddUser(add AddUser) (*User, error) {
 	//验证信息
 	if add.Password != add.ConfirmPassword {
-		return errors.New("两次输入的密码请确保一致")
+		return nil, errors.New("两次输入的密码请确保一致")
 	}
 
 	if l := strings.Count(add.Password, ""); l < 6 || l >= 20 {
-		return errors.New("密码请输入6-20个字符")
+		return nil, errors.New("密码请输入6-20个字符")
 	}
 
 	//start,查询账号是否存在
 	o := orm.NewOrm()
 	var user User
+
+	fmt.Println(m)
 	o.QueryTable(m.TableName()).Filter("userName", m.Username).One(&user)
 	if user.Username == m.Username {
-		return errors.New("用户名已存在")
+		return nil, errors.New("用户名已存在")
 	}
 	//end
 
@@ -74,7 +76,9 @@ func (m *User) AddUser(add AddUser) error {
 	//插入数据
 	_, err = o.Insert(m)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+
+	fmt.Println("新增用户", user)
+	return m, nil
 }
