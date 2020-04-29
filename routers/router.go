@@ -6,16 +6,14 @@ import (
 )
 
 func init() {
-	//beego.Router("/", &controllers.MainController{})
-	//beego.Router("/", &controllers.HomeController{}, "get:Index")
-	//beego.Router("/2", &controllers.HomeController{}, "get:Index2")
-	//beego.Router("/explore", &controllers.ExploreController{}, "*:Index")
-
 	//登录、注册、修改用户资料
 	beego.Router("/login", &controllers.UserController{}, "get:Login")
 	beego.Router("/register", &controllers.UserController{}, "post:Register")
 
-	// 编辑、发布文章
+	// 文章
+	beego.Router("/getLanguageList", &controllers.Language{}, "get:GetLanguageList")
 	beego.Router("/editArticle", &controllers.MarkdownStore{}, "post:Edit")
+
+	// 语言
 	beego.Router("/editLanguage", &controllers.Language{}, "post:Edit")
 }

@@ -224,3 +224,10 @@ func ResultHandle(obj interface{}, err error) map[string]interface{} {
 		"data": obj,
 	}
 }
+
+func ResultListHandle(obj interface{}, err error) map[string]interface{} {
+	return map[string]interface{}{
+		"err":  err,
+		"data": obj,
+	}
+}

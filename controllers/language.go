@@ -27,5 +27,16 @@ func (m *Language) Edit() {
 }
 
 func (m *Language) GetLanguageList() {
+	language := models.NewLanguage()
+	userId := m.GetString("userId")
 
+	list, err := language.GetList(userId)
+
+	if err != nil {
+		m.Data["json"] = common.ResultHandle(nil, err)
+	} else {
+		m.Data["json"] = common.ResultHandle(list, nil)
+	}
+
+	m.ServeJSON()
 }
