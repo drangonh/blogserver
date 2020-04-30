@@ -30,12 +30,20 @@ func (m *MarkdownStore) Edit() {
 //查询指定用户指定分类的文章,也可以查询指定客户所有的文章
 func (m *MarkdownStore) GetMarkdownList() {
 	userId, _ := m.GetInt("userId")
+
+	// isBrief
+	// true查询简介和标题
+	// false查询详情和标题
+	// 默认查询简介
+
+	isBrief, _ := m.GetBool("isBrief", true)
+
 	if userId == 0 {
 		m.Data["json"] = common.ResultHandle(nil, errors.New("请求参数userId错误"))
 	} else {
 		languageId, _ := m.GetInt("languageId")
 
-		List, err := models.NewMarkdownStore().GetList(userId, languageId)
+		List, err := models.NewMarkdownStore().GetList(userId, languageId, isBrief)
 
 		if err != nil {
 			m.Data["json"] = common.ResultHandle(nil, err)
