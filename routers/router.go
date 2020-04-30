@@ -12,6 +12,7 @@ func init() {
 
 	// 文章
 	beego.Router("/editArticle", &controllers.MarkdownStore{}, "post:Edit")
+	beego.Router("/getArticleList", &controllers.MarkdownStore{}, "get:GetMarkdownList")
 
 	// 语言
 	beego.Router("/getLanguageList", &controllers.Language{}, "get:GetLanguageList")

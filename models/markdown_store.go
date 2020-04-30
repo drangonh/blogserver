@@ -9,6 +9,7 @@ type MarkdownStoreModel struct {
 	UserId      int    ` orm:"column(userId)" json:"userId"`
 	LanguageId  int    `orm:"type(int);column(languageId)" json:"languageId"`    //对应语音的ID
 	Content     string `orm:"type(text);column(content)" json:"content"`         //文章内容对应的是markdown的字符串
+	StoreTitle  string `orm:"type(text);column(storeTitle)" json:"storeTitle"`   //文章标题
 	Brief       string `orm:"type(text);column(brief)" json:"brief"`             //文章内容对应的是markdown的字符串前100个字符
 	HtmlContent string `orm:"type(text);column(htmlContent)" json:"htmlContent"` //文章内容：markdown内容对应的html，暂时不会存值
 }
@@ -41,28 +42,29 @@ func (c *MarkdownStoreModel) Edit(str ...string) (err error) {
 	return
 }
 
-func (c *MarkdownStoreModel) GetList(userId int, languageId int, isBrief bool) (list *[]MarkdownStoreModel, err error) {
+func (c *MarkdownStoreModel) GetList(userId int, languageId int, isBrief bool) (list []MarkdownStoreModel, err error) {
 	o := orm.NewOrm()
 
+	// languageId,查询用户所有的文章
 	if languageId == 0 {
 		//查询简介
 		if isBrief {
-			_, err = o.Raw("SELECT contentId, userId, languageId, brief, htmlContent FROM "+
-				TNMarkdownStore()+" WHERE userId = ? AND isBrief", userId, true).QueryRows(list)
+			_, err = o.Raw("SELECT contentId, userId, storeTitle, languageId, brief, htmlContent FROM "+
+				TNMarkdownStore()+" WHERE userId = ?", userId).QueryRows(&list)
 		} else {
 			// 查询详情
-			_, err = o.Raw("SELECT contentId, userId, languageId, content, htmlContent FROM "+
-				TNMarkdownStore()+" WHERE userId = ? AND isBrief", userId, true).QueryRows(list)
+			_, err = o.Raw("SELECT contentId, userId, storeTitle, languageId, content, htmlContent FROM "+
+				TNMarkdownStore()+" WHERE userId = ?", userId).QueryRows(&list)
 		}
 	} else {
 		//查询简介
 		if isBrief {
-			_, err = o.Raw("SELECT contentId, userId, languageId, brief, htmlContent FROM "+
-				TNMarkdownStore()+" WHERE userId = ? AND languageId = ?", userId, languageId).QueryRows(list)
+			_, err = o.Raw("SELECT contentId, userId, storeTitle, languageId, brief, htmlContent FROM "+
+				TNMarkdownStore()+" WHERE userId = ? AND languageId = ?", userId, languageId).QueryRows(&list)
 		} else {
 			// 查询详情
-			_, err = o.Raw("SELECT contentId, userId, languageId, content, htmlContent FROM "+
-				TNMarkdownStore()+" WHERE userId = ? AND languageId = ?", userId, languageId).QueryRows(list)
+			_, err = o.Raw("SELECT contentId, userId, storeTitle, languageId, content, htmlContent FROM "+
+				TNMarkdownStore()+" WHERE userId = ? AND languageId = ?", userId, languageId).QueryRows(&list)
 		}
 	}
 
