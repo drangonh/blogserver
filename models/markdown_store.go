@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"github.com/astaxie/beego/orm"
 )
 
@@ -35,6 +36,8 @@ func (c *MarkdownStoreModel) Edit(str ...string) (err error) {
 
 	if one.ContentId > 0 {
 		_, err = o.Update(c, str...)
+		fmt.Println(err)
+
 	} else {
 		_, err = o.Insert(c)
 	}
@@ -68,5 +71,12 @@ func (c *MarkdownStoreModel) GetList(userId int, languageId int, isBrief bool) (
 		}
 	}
 
+	return
+}
+
+// 获取详情
+func (c *MarkdownStoreModel) GetDetail(userId int, languageId int, contentId int) (detail MarkdownStoreModel, err error) {
+	o := orm.NewOrm()
+	err = o.QueryTable(TNMarkdownStore()).Filter("userId", userId).Filter("languageId", languageId).Filter("contentId", contentId).One(&detail)
 	return
 }

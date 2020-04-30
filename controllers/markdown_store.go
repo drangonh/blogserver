@@ -5,6 +5,7 @@ import (
 	"blogserver/utils/common"
 	"encoding/json"
 	"errors"
+	"fmt"
 )
 
 type MarkdownStore struct {
@@ -18,7 +19,7 @@ func (m *MarkdownStore) Edit() {
 	json.Unmarshal(data, store) //解析二进制json，把结果放进ob中
 
 	//obj := &models.MarkdownStore{UserId: store.UserId,LanguageId: store.LanguageId,Content: store.Content}
-	err := store.Edit("content", "htmlContent")
+	err := store.Edit("content", "htmlContent", "storeTitle")
 	if nil != err {
 		m.Data["json"] = common.ResultHandle(map[string]bool{"result": true}, err)
 	} else {
@@ -52,5 +53,22 @@ func (m *MarkdownStore) GetMarkdownList() {
 		}
 	}
 
+	m.ServeJSON()
+}
+
+// 获取详情
+func (m *MarkdownStore) GetDetail() {
+	contentId, _ := m.GetInt("contentId")
+	userId, _ := m.GetInt("userId")
+	languageId, _ := m.GetInt("languageId")
+
+	fmt.Println(contentId, userId, languageId)
+	detail, err := models.NewMarkdownStore().GetDetail(userId, languageId, contentId)
+
+	if err != nil {
+		m.Data["json"] = common.ResultHandle(nil, err)
+	} else {
+		m.Data["json"] = common.ResultHandle(detail, nil)
+	}
 	m.ServeJSON()
 }
