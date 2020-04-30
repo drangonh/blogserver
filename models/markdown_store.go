@@ -1,6 +1,8 @@
 package models
 
-import "github.com/astaxie/beego/orm"
+import (
+	"github.com/astaxie/beego/orm"
+)
 
 type MarkdownStoreModel struct {
 	ContentId   int    `orm:"pk;auto;column(contentId)" json:"contentId"`
@@ -28,6 +30,16 @@ func (c *MarkdownStoreModel) Edit(str ...string) (err error) {
 	} else {
 		_, err = o.Insert(c)
 	}
+	return
+}
 
+func (c *MarkdownStoreModel) GetList(userId int, languageId int) (list *[]MarkdownStoreModel, err error) {
+	o := orm.NewOrm()
+
+	if languageId == 0 {
+		_, err = o.QueryTable(TNMarkdownStore()).Filter("userId", userId).All(list)
+	} else {
+		_, err = o.QueryTable(TNMarkdownStore()).Filter("userId", userId).Filter("languageId", languageId).All(list)
+	}
 	return
 }

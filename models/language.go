@@ -1,7 +1,6 @@
 package models
 
 import (
-	"fmt"
 	"github.com/astaxie/beego/orm"
 )
 
@@ -35,8 +34,7 @@ func (c *LanguageModel) Edit(str ...string) (err error) {
 
 func (c *LanguageModel) GetList(id string) (list []LanguageModel, err error) {
 	o := orm.NewOrm()
-	err = o.QueryTable(TNLanguage()).Filter("userId", id).One(&list)
+	_, err = o.QueryTable(TNLanguage()).Filter("userId", id).All(&list)
 
-	fmt.Println(list)
 	return
 }

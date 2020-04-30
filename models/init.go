@@ -34,5 +34,5 @@ func TNLanguage() string {
 
 // 文章表
 func TNMarkdownStore() string {
-	return "markdownStore"
+	return "markdown_store"
 }

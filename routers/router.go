@@ -11,9 +11,9 @@ func init() {
 	beego.Router("/register", &controllers.UserController{}, "post:Register")
 
 	// 文章
-	beego.Router("/getLanguageList", &controllers.Language{}, "get:GetLanguageList")
 	beego.Router("/editArticle", &controllers.MarkdownStore{}, "post:Edit")
 
 	// 语言
+	beego.Router("/getLanguageList", &controllers.Language{}, "get:GetLanguageList")
 	beego.Router("/editLanguage", &controllers.Language{}, "post:Edit")
 }
