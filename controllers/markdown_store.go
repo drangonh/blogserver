@@ -19,7 +19,7 @@ func (m *MarkdownStore) Edit() {
 	json.Unmarshal(data, store) //解析二进制json，把结果放进ob中
 
 	//obj := &models.MarkdownStore{UserId: store.UserId,LanguageId: store.LanguageId,Content: store.Content}
-	err := store.Edit("content", "htmlContent", "storeTitle")
+	err := store.Edit("content", "htmlContent", "storeTitle", "brief")
 	if nil != err {
 		m.Data["json"] = common.ResultHandle(map[string]bool{"result": true}, err)
 	} else {
