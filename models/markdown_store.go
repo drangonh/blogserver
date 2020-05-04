@@ -32,7 +32,7 @@ func (c *MarkdownStoreModel) Edit(str ...string) (err error) {
 	// 导致出现程序异常
 	// 解决办法是把string转成[]rune(str),最后转成string保存即可
 	newStr := []rune(c.Content)
-	if len(c.Content) < 100 {
+	if len(newStr) < 100 {
 		c.Brief = c.Content
 	} else {
 		arr := newStr[0:100]
