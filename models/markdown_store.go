@@ -28,12 +28,18 @@ func (c *MarkdownStoreModel) Edit(str ...string) (err error) {
 	var one MarkdownStoreModel
 	o.QueryTable(TNMarkdownStore()).Filter("contentId", c.ContentId).One(&one)
 
+	// 直接截取字符串可能出现截取了字符串中一个字符的部分字节，截取字符串最后的部分乱码。最终
+	// 导致出现程序异常
+	// 解决办法是把string转成[]rune(str),最后转成string保存即可
+	newStr := []rune(c.Content)
 	if len(c.Content) < 100 {
 		c.Brief = c.Content
 	} else {
-		c.Brief = c.Content[0:100]
+		arr := newStr[0:100]
+		c.Brief = string(arr)
 	}
 
+	fmt.Println("简介：：：", c.Brief)
 	if one.ContentId > 0 {
 		_, err = o.Update(c, str...)
 		fmt.Println(err)
