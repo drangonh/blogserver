@@ -12,6 +12,10 @@ type MarkdownStore struct {
 	BaseController
 }
 
+type deleteModal struct {
+	contentId int `json:"contentId"`
+}
+
 // 新增或者插入新的文章
 func (m *MarkdownStore) Edit() {
 	store := models.NewMarkdownStore()
@@ -69,6 +73,23 @@ func (m *MarkdownStore) GetDetail() {
 		m.Data["json"] = common.ResultHandle(nil, err)
 	} else {
 		m.Data["json"] = common.ResultHandle(detail, nil)
+	}
+	m.ServeJSON()
+}
+
+// 删除文章
+func (m *MarkdownStore) DeletePage() {
+	var del map[string]int
+	obj := m.Ctx.Input.RequestBody
+	json.Unmarshal(obj, &del)
+
+	fmt.Println(del, obj)
+	err := models.NewMarkdownStore().DeletePage(del["contentId"])
+
+	if err != nil {
+		m.Data["json"] = common.ResultHandle(false, err)
+	} else {
+		m.Data["json"] = common.ResultHandle(true, nil)
 	}
 	m.ServeJSON()
 }

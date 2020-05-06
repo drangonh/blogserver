@@ -17,6 +17,7 @@ func init() {
 	beego.Router("/editArticle", &controllers.MarkdownStore{}, "post:Edit")
 	beego.Router("/getArticleList", &controllers.MarkdownStore{}, "get:GetMarkdownList")
 	beego.Router("/getArticleDetail", &controllers.MarkdownStore{}, "get:GetDetail")
+	beego.Router("/deleteArticle", &controllers.MarkdownStore{}, "post:DeletePage")
 
 	// 语言
 	beego.Router("/getLanguageList", &controllers.Language{}, "get:GetLanguageList")

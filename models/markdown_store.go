@@ -86,3 +86,10 @@ func (c *MarkdownStoreModel) GetDetail(userId int, languageId int, contentId int
 	err = o.QueryTable(TNMarkdownStore()).Filter("userId", userId).Filter("languageId", languageId).Filter("contentId", contentId).One(&detail)
 	return
 }
+
+// 删除文章
+func (c *MarkdownStoreModel) DeletePage(contentId int) (err error) {
+	o := orm.NewOrm()
+	_, err = o.QueryTable(TNMarkdownStore()).Filter("contentId", contentId).Delete()
+	return
+}
