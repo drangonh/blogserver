@@ -22,7 +22,7 @@ func (m *MarkdownStore) Edit() {
 	data := m.Ctx.Input.RequestBody
 	json.Unmarshal(data, store) //解析二进制json，把结果放进ob中
 
-	err := store.Edit("content", "htmlContent", "storeTitle", "brief")
+	err := store.Edit("content", "htmlContent", "storeTitle", "brief", "languageId")
 	if nil != err {
 		m.Data["json"] = common.ResultHandle(map[string]bool{"result": true}, err)
 	} else {

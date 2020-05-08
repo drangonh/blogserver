@@ -17,6 +17,8 @@ func (m *Language) Edit() {
 	data := m.Ctx.Input.RequestBody
 	json.Unmarshal(data, language) //解析二进制json，把结果放进ob中
 	//obj := &models.MarkdownStore{UserId: store.UserId,LanguageId: store.LanguageId,Content: store.Content}
+	language.UserId = m.User.UserId
+
 	err := language.Edit("languageContent", "languageTitle")
 	if nil != err {
 		fmt.Println(err)
