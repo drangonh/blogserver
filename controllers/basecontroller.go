@@ -8,8 +8,58 @@
 
 package controllers
 
-import "github.com/astaxie/beego"
+import (
+	"blogserver/common"
+	"blogserver/models"
+	"blogserver/utils"
+	"github.com/astaxie/beego"
+	"time"
+)
 
 type BaseController struct {
 	beego.Controller
+	User *models.User
+}
+
+type CookieRemember struct {
+	UserId int
+	Time   time.Time
+}
+
+//每个子类Controller公用方法调用前，都执行一下Prepare方法
+func (c *BaseController) Prepare() {
+	c.Ctx.ResponseWriter.Header().Set("Access-Control-Allow-Origin", c.Ctx.Request.Header.Get("Origin"))
+
+	c.User = models.NewUser() //初始化
+	//从session中获取用户信息
+	if user, ok := c.GetSession(common.SessionName).(models.User); ok && user.UserId > 0 {
+		c.User = &user
+	} else {
+		//fmt.Println("开始从cookie中获取")
+		//如果Cookie中存在登录信息，从cookie中获取用户信息
+		if cookie, ok := c.GetSecureCookie(common.AppKey(), "login"); ok {
+			var remember CookieRemember
+			err := utils.Decode(cookie, &remember)
+
+			if err == nil {
+				user, err := models.NewUser().Find(remember.UserId)
+				if err == nil {
+					c.SetMember(*user)
+					c.User = user
+				}
+			}
+		}
+	}
+}
+
+// 设置登录用户信息
+func (c *BaseController) SetMember(user models.User) {
+	if user.UserId <= 0 {
+		c.DelSession(common.SessionName)
+		c.DelSession("uid")
+		c.DestroySession()
+	} else {
+		c.SetSession(common.SessionName, user)
+		c.SetSession("uid", user.UserId)
+	}
 }

@@ -81,3 +81,12 @@ func (m *User) AddUser(add AddUser) (*User, error) {
 	fmt.Println("新增用户", user)
 	return m, nil
 }
+
+func (m *User) Find(id int) (user *User, err error) {
+	o := orm.NewOrm()
+	user = &User{UserId: id}
+
+	fmt.Println("查询用户信息：", user)
+	err = o.Read(user)
+	return user, err
+}

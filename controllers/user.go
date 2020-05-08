@@ -1,14 +1,22 @@
 package controllers
 
 import (
+	common2 "blogserver/common"
 	"blogserver/models"
+	"blogserver/utils"
 	"blogserver/utils/common"
 	"encoding/json"
 	"fmt"
+	"time"
 )
 
 type UserController struct {
 	BaseController
+}
+
+type LoginModal struct {
+	UserName string `json:"userName"`
+	PassWord string `json:"passWord"`
 }
 
 func (u *UserController) Index2() string {
@@ -21,16 +29,26 @@ func (u *UserController) Index2() string {
 // @Param	password		query 	string	true		"The password for login"
 // @Success 200 {string} login success
 // @Failure 403 user not exist
-// @router /login [get]
+// @router /login [Post]
 func (u *UserController) Login() {
-	userName := u.GetString("userName")
-	passWord := u.GetString("passWord")
-	if user, err := models.NewUser().Login(userName, passWord); err == nil {
+	var remember CookieRemember
+	var loginObj LoginModal
+	data := u.Ctx.Input.RequestBody
+	json.Unmarshal(data, &loginObj)
+	fmt.Println(loginObj, data)
+	if user, err := models.NewUser().Login(loginObj.UserName, loginObj.PassWord); err == nil {
 		u.Data["json"] = common.ResultHandle(user, nil)
+
+		//登录成功之后设置加密的cookie
+		remember.UserId = user.UserId
+		remember.Time = time.Now()
+		v, _ := utils.Encode(remember)
+		u.SetSecureCookie(common2.AppKey(), "login", v, 24*3600*365)
 	} else {
 		fmt.Println("登录错误", err)
 		u.Data["json"] = common.ResultHandle(nil, err)
 	}
+
 	u.ServeJSON()
 }
 

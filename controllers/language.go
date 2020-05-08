@@ -12,6 +12,7 @@ type Language struct {
 }
 
 func (m *Language) Edit() {
+	fmt.Println("获取baseController中获取到的用户信息", m.User)
 	language := models.NewLanguage()
 	data := m.Ctx.Input.RequestBody
 	json.Unmarshal(data, language) //解析二进制json，把结果放进ob中
@@ -27,6 +28,7 @@ func (m *Language) Edit() {
 }
 
 func (m *Language) GetLanguageList() {
+	fmt.Println("获取baseController中获取到的用户信息", m.User)
 	language := models.NewLanguage()
 	userId := m.GetString("userId")
 	list, err := language.GetList(userId)

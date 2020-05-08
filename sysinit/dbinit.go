@@ -16,21 +16,21 @@ import (
 )
 
 func dbInit(alias ...string) {
+	//设置是否为开发模式，控制打印
+	isDev := beego.AppConfig.String("runmode") == "dev"
+
 	if len(alias) > 0 {
 		for _, alia := range alias {
 			registerDatabase(alia)
 
 			if alia == "w" {
-				orm.RunSyncdb("default", false, true)
+				orm.RunSyncdb("default", false, isDev)
 			}
 		}
 	} else {
 		registerDatabase("w")
-		orm.RunSyncdb("default", false, true)
+		orm.RunSyncdb("default", false, isDev)
 	}
-
-	//设置是否为开发模式，控制打印
-	isDev := beego.AppConfig.String("runmode") == "dev"
 
 	if isDev {
 		//设置开发模式下可以打印日志

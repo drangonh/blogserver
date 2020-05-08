@@ -18,13 +18,17 @@ import (
 
 func sysInit() {
 
-	uploads := filepath.Join("/", "uploads")
+	//设置上传的静态资源路径，此处就是当前目录下的uploads
+	uploads := filepath.Join("./", "uploads")
 	beego.BConfig.WebConfig.StaticDir["uploads"] = uploads
 
+	//注册views中需要调用的后端的函数
 	registerFunctions()
 }
 
 func registerFunctions() {
+
+	//cdnjs这个函数就是返回cdnjs的全路径
 	beego.AddFuncMap("cdnjs", func(p string) string {
 		cdn := beego.AppConfig.DefaultString("cdnjs", "")
 		if strings.HasPrefix(p, "/") && strings.HasPrefix(cdn, "/") {
