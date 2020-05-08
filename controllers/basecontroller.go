@@ -12,6 +12,7 @@ import (
 	"blogserver/common"
 	"blogserver/models"
 	"blogserver/utils"
+	"fmt"
 	"github.com/astaxie/beego"
 	"time"
 )
@@ -33,11 +34,12 @@ func (c *BaseController) Prepare() {
 	c.User = models.NewUser() //初始化
 	//从session中获取用户信息
 	if user, ok := c.GetSession(common.SessionName).(models.User); ok && user.UserId > 0 {
+		fmt.Println("获取session值")
 		c.User = &user
 	} else {
-		//fmt.Println("开始从cookie中获取")
 		//如果Cookie中存在登录信息，从cookie中获取用户信息
 		if cookie, ok := c.GetSecureCookie(common.AppKey(), "login"); ok {
+			fmt.Println("获取cookie值")
 			var remember CookieRemember
 			err := utils.Decode(cookie, &remember)
 

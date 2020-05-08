@@ -43,7 +43,7 @@ func (u *UserController) Login() {
 		remember.UserId = user.UserId
 		remember.Time = time.Now()
 		v, _ := utils.Encode(remember)
-		u.SetSecureCookie(common2.AppKey(), "login", v, 24*3600*365)
+		u.SetSecureCookie(common2.AppKey(), "login", v, common2.CookieMastLiftTime)
 	} else {
 		fmt.Println("登录错误", err)
 		u.Data["json"] = common.ResultHandle(nil, err)
