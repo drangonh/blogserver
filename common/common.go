@@ -10,7 +10,7 @@ import (
 const SessionName = "blog_server"
 
 // cookie过期时间设置
-const CookieMastLiftTime = 3600
+const CookieMastLiftTime = 3600 * 24
 
 // app_key
 func AppKey() string {
