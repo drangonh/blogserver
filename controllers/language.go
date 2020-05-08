@@ -28,7 +28,6 @@ func (m *Language) Edit() {
 }
 
 func (m *Language) GetLanguageList() {
-	fmt.Println("获取baseController中获取到的用户信息", m.User.UserId)
 	language := models.NewLanguage()
 	id := m.User.UserId
 	list, err := language.GetList(strconv.Itoa(id))
