@@ -11,6 +11,7 @@ func init() {
 
 	//登录、注册、修改用户资料
 	beego.Router("/login", &controllers.UserController{}, "post:Login")
+	beego.Router("/logout", &controllers.UserController{}, "get:Logout")
 	beego.Router("/register", &controllers.UserController{}, "post:Register")
 
 	// 文章

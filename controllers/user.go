@@ -43,12 +43,27 @@ func (u *UserController) Login() {
 		remember.UserId = user.UserId
 		remember.Time = time.Now()
 		v, _ := utils.Encode(remember)
+
+		//登录成功设置cookie
 		u.SetSecureCookie(common2.AppKey(), "login", v, common2.CookieMastLiftTime)
 	} else {
 		fmt.Println("登录错误", err)
 		u.Data["json"] = common.ResultHandle(nil, err)
 	}
 
+	u.ServeJSON()
+}
+
+//退出登录,清除登录cookie和session
+func (u *UserController) Logout() {
+	u.SetMember(models.User{})
+	u.SetSecureCookie(common2.AppKey(), "login", "", -3600)
+
+	obj := map[string]interface{}{
+		"res": true,
+		"msg": "退出登录",
+	}
+	u.Data["json"] = common.ResultHandle(obj, nil)
 	u.ServeJSON()
 }
 
