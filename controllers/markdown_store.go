@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/astaxie/beego"
 )
 
 type MarkdownStore struct {
@@ -33,25 +34,48 @@ func (m *MarkdownStore) Edit() {
 
 //查询指定用户指定分类的文章,也可以查询指定客户所有的文章
 func (m *MarkdownStore) GetMarkdownList() {
+	var contentIds []int
 	id := m.User.UserId
 	// isBrief
 	// true查询简介和标题
 	// false查询详情和标题
 	// 默认查询简介
-
 	isBrief, _ := m.GetBool("isBrief", true)
 
+	page, err := m.GetInt("page", 1)
+	if err != nil {
+		m.Data["json"] = common.ResultHandle(nil, errors.New("请求参数page缺少"))
+	}
+	size, err := m.GetInt("pageSize", 1)
+	if err != nil {
+		m.Data["json"] = common.ResultHandle(nil, errors.New("请求参数pageSize缺少"))
+	}
 	if id == 0 {
 		m.Data["json"] = common.ResultHandle(nil, errors.New("请求参数userId错误"))
 	} else {
 		languageId, _ := m.GetInt("languageId")
 
-		List, err := models.NewMarkdownStore().GetList(id, languageId, isBrief)
+		ids, count, err := models.NewMarkdownStore().GetListCount(id, languageId, page, size)
+
+		fmt.Println("分页的数组", ids)
+		if err != nil {
+			beego.Error(err.Error())
+		} else {
+			for _, obj := range ids {
+				contentIds = append(contentIds, obj.ContentId)
+			}
+		}
+
+		List, err := models.NewMarkdownStore().GetList(contentIds, isBrief)
 
 		if err != nil {
 			m.Data["json"] = common.ResultHandle(nil, err)
 		} else {
-			m.Data["json"] = common.ResultHandle(List, nil)
+			m.Data["json"] = common.ResultHandle(
+				map[string]interface{}{
+					"list":  List,  //分页的列表
+					"count": count, //文章总数
+				}, nil)
 		}
 	}
 

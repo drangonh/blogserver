@@ -3,6 +3,8 @@ package models
 import (
 	"fmt"
 	"github.com/astaxie/beego/orm"
+	"strconv"
+	"strings"
 )
 
 type MarkdownStoreModel struct {
@@ -51,30 +53,72 @@ func (c *MarkdownStoreModel) Edit(str ...string) (err error) {
 	return
 }
 
-func (c *MarkdownStoreModel) GetList(userId int, languageId int, isBrief bool) (list []MarkdownStoreModel, err error) {
+//分页查询第一步：查询总数和对应分页的contentId数组
+func (c *MarkdownStoreModel) GetListCount(userId int, languageId int, page int, size int) (list []MarkdownStoreModel, cnt int, err error) {
+	var count struct {
+		Cnt int
+	}
+
+	o := orm.NewOrm()
+	fields := "contentId, userId"
+	// languageId,查询用户所有的文章
+	var sql, sqlCount string
+	if languageId == 0 {
+		sql = "SELECT %v  FROM " +
+			TNMarkdownStore() + " WHERE userId = ?"
+		//查询总数
+		sqlCount = fmt.Sprintf(sql, "count(contentId) cnt")
+		//查询该分页的id
+		sql = fmt.Sprintf(sql, fields)
+		err = o.Raw(sqlCount, userId).QueryRow(&count)
+
+	} else {
+		sql = "SELECT %v FROM " +
+			TNMarkdownStore() + " WHERE userId = ? AND languageId = ?"
+		sqlCount = fmt.Sprintf(sql, "count(contentId) cnt")
+		sql = fmt.Sprintf(sql, fields)
+		err = o.Raw(sqlCount, userId, languageId).QueryRow(&count)
+	}
+
+	cnt = count.Cnt
+
+	if cnt <= 0 {
+		return
+	}
+
+	limit := fmt.Sprintf(" limit %v offset %v", size, (page-1)*size)
+
+	sql = sql + limit
+
+	if languageId == 0 {
+		_, err = o.Raw(sql, userId).QueryRows(&list)
+	} else {
+		_, err = o.Raw(sql, userId, languageId).QueryRows(&list)
+	}
+	return
+}
+
+func (c *MarkdownStoreModel) GetList(ids []int, isBrief bool) (list []MarkdownStoreModel, err error) {
 	o := orm.NewOrm()
 
-	// languageId,查询用户所有的文章
-	if languageId == 0 {
-		//查询简介
-		if isBrief {
-			_, err = o.Raw("SELECT contentId, userId, storeTitle, languageId, brief, htmlContent FROM "+
-				TNMarkdownStore()+" WHERE userId = ?", userId).QueryRows(&list)
-		} else {
-			// 查询详情
-			_, err = o.Raw("SELECT contentId, userId, storeTitle, languageId, content, htmlContent FROM "+
-				TNMarkdownStore()+" WHERE userId = ?", userId).QueryRows(&list)
-		}
+	var strS []string
+
+	for _, item := range ids {
+		strS = append(strS, strconv.Itoa(item))
+	}
+
+	//查询简介
+	if isBrief {
+		sql := "SELECT contentId, userId, storeTitle, languageId, brief, htmlContent FROM " +
+			TNMarkdownStore() + " WHERE contentId in (%v)"
+		sql = fmt.Sprintf(sql, strings.Join(strS, ","))
+		_, err = o.Raw(sql).QueryRows(&list)
 	} else {
-		//查询简介
-		if isBrief {
-			_, err = o.Raw("SELECT contentId, userId, storeTitle, languageId, brief, htmlContent FROM "+
-				TNMarkdownStore()+" WHERE userId = ? AND languageId = ?", userId, languageId).QueryRows(&list)
-		} else {
-			// 查询详情
-			_, err = o.Raw("SELECT contentId, userId, storeTitle, languageId, content, htmlContent FROM "+
-				TNMarkdownStore()+" WHERE userId = ? AND languageId = ?", userId, languageId).QueryRows(&list)
-		}
+		// 查询详情
+		sql := "SELECT contentId, userId, storeTitle, languageId, content, htmlContent FROM " +
+			TNMarkdownStore() + " WHERE contentId in (%v)"
+		sql = fmt.Sprintf(sql, strings.Join(strS, ","))
+		_, err = o.Raw(sql).QueryRows(&list)
 	}
 
 	return
