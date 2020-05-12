@@ -6,8 +6,9 @@ info:
   version: 1.0.0
   contact:
     email: astaxie@gmail.com
-basePath: /api
+basePath: /blog
 paths:
+  /: {}
   /language/editLanguage:
     post:
       tags:

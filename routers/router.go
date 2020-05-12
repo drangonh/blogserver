@@ -10,7 +10,10 @@ import (
 )
 
 func init() {
-	ns := beego.NewNamespace("/api",
+	ns := beego.NewNamespace("/blog",
+		beego.NSInclude(
+			&controllers.HomeController{},
+		),
 
 		beego.NSNamespace("/user",
 			beego.NSInclude(

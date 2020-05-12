@@ -7,6 +7,15 @@ import (
 
 func init() {
 
+	beego.GlobalControllerRouter["blogserver/controllers:HomeController"] = append(beego.GlobalControllerRouter["blogserver/controllers:HomeController"],
+		beego.ControllerComments{
+			Method:           "Index",
+			Router:           `/`,
+			AllowHTTPMethods: []string{"*"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
 	beego.GlobalControllerRouter["blogserver/controllers:Language"] = append(beego.GlobalControllerRouter["blogserver/controllers:Language"],
 		beego.ControllerComments{
 			Method:           "Edit",

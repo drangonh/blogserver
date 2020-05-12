@@ -8,8 +8,9 @@
             "email": "astaxie@gmail.com"
         }
     },
-    "basePath": "/api",
+    "basePath": "/blog",
     "paths": {
+        "/": {},
         "/language/editLanguage": {
             "post": {
                 "tags": [

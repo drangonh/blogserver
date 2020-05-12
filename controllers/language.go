@@ -12,6 +12,11 @@ type Language struct {
 	BaseController
 }
 
+func (m *Language) URLMapping() {
+	m.Mapping("Edit", m.Edit)
+	m.Mapping("GetLanguageList", m.GetLanguageList)
+}
+
 // @Title Edit
 // @Description 语言编辑或者新增
 // @Param languageTitle formData  string true "语言标题"
