@@ -29,9 +29,9 @@ type CookieRemember struct {
 
 //每个子类Controller公用方法调用前，都执行一下Prepare方法
 func (c *BaseController) Prepare() {
-	c.Ctx.Output.Header("Access-Control-Allow-Origin", "*")
+	//c.Ctx.Output.Header("Access-Control-Allow-Origin", "*")
 	//CORS(Cross-Origin Resource Sharing，跨域资源共享)允许设置，浏览器现在都自动支持了CORS
-	//c.Ctx.ResponseWriter.Header().Set("Access-Control-Allow-Origin", c.Ctx.Request.Header.Get("Origin"))
+	c.Ctx.ResponseWriter.Header().Set("Access-Control-Allow-Origin", c.Ctx.Request.Header.Get("Origin"))
 
 	c.User = models.NewUser() //初始化
 	//从session中获取用户信息

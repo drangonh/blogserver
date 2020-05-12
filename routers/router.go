@@ -10,7 +10,7 @@ import (
 )
 
 func init() {
-	ns := beego.NewNamespace("/v1",
+	ns := beego.NewNamespace("/api",
 
 		beego.NSNamespace("/user",
 			beego.NSInclude(
@@ -29,7 +29,4 @@ func init() {
 		),
 	)
 	beego.AddNamespace(ns)
-
-	beego.SetStaticPath("/swagger", "swagger")
-
 }

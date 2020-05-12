@@ -7,6 +7,24 @@ import (
 
 func init() {
 
+	beego.GlobalControllerRouter["blogserver/controllers:Language"] = append(beego.GlobalControllerRouter["blogserver/controllers:Language"],
+		beego.ControllerComments{
+			Method:           "Edit",
+			Router:           `/editLanguage`,
+			AllowHTTPMethods: []string{"post"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
+	beego.GlobalControllerRouter["blogserver/controllers:Language"] = append(beego.GlobalControllerRouter["blogserver/controllers:Language"],
+		beego.ControllerComments{
+			Method:           "GetLanguageList",
+			Router:           `/getLanguageList`,
+			AllowHTTPMethods: []string{"get"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
 	beego.GlobalControllerRouter["blogserver/controllers:MarkdownStore"] = append(beego.GlobalControllerRouter["blogserver/controllers:MarkdownStore"],
 		beego.ControllerComments{
 			Method:           "DeletePage",

@@ -17,12 +17,6 @@ type deleteModal struct {
 	contentId int `json:"contentId"`
 }
 
-// 文章
-//beego.Router("/editArticle", &controllers.MarkdownStore{}, "post:Edit")
-//beego.Router("/getArticleList", &controllers.MarkdownStore{}, "get:GetMarkdownList")
-//beego.Router("/getArticleDetail", &controllers.MarkdownStore{}, "get:GetDetail")
-//beego.Router("/deleteArticle", &controllers.MarkdownStore{}, "post:DeletePage")
-
 // 注解接口
 func (m *MarkdownStore) URLMapping() {
 	m.Mapping("Edit", m.Edit)

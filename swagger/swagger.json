@@ -8,8 +8,56 @@
             "email": "astaxie@gmail.com"
         }
     },
-    "basePath": "/v1",
+    "basePath": "/api",
     "paths": {
+        "/language/editLanguage": {
+            "post": {
+                "tags": [
+                    "language"
+                ],
+                "description": "语言编辑或者新增",
+                "operationId": "Language.Edit",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "languageTitle",
+                        "description": "语言标题",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "languageContent",
+                        "description": "语言简介",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "true"
+                    },
+                    "nil": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/language/getLanguageList": {
+            "get": {
+                "tags": [
+                    "language"
+                ],
+                "description": "语言列表",
+                "operationId": "Language.Edit",
+                "responses": {
+                    "200": {
+                        "description": "list"
+                    },
+                    "nil": {
+                        "description": ""
+                    }
+                }
+            }
+        },
         "/markdownStore/deleteArticle": {
             "post": {
                 "tags": [
