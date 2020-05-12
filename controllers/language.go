@@ -12,6 +12,10 @@ type Language struct {
 	BaseController
 }
 
+// 语言
+//beego.Router("/getLanguageList", &controllers.Language{}, "get:GetLanguageList")
+//beego.Router("/editLanguage", &controllers.Language{}, "post:Edit")
+
 func (m *Language) Edit() {
 	language := models.NewLanguage()
 	data := m.Ctx.Input.RequestBody

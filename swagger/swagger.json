@@ -10,6 +10,155 @@
     },
     "basePath": "/v1",
     "paths": {
+        "/markdownStore/deleteArticle": {
+            "post": {
+                "tags": [
+                    "markdownStore"
+                ],
+                "description": "删除文章",
+                "operationId": "MarkdownStore.DeletePage",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "contentId",
+                        "description": "文章id",
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "true"
+                    },
+                    "nil": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/markdownStore/editArticle": {
+            "post": {
+                "tags": [
+                    "markdownStore"
+                ],
+                "description": "新增或者插入新的文章",
+                "operationId": "MarkdownStore.Edit",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "languageId",
+                        "description": "文章ID",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "query",
+                        "name": "content",
+                        "description": "文章内容",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "storeTitle",
+                        "description": "文章标题",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "htmlContent",
+                        "description": "文章内容对应的html",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"result\": true, \"msg\": \"新增成功\"}"
+                    },
+                    "{\"result\":": {
+                        "description": "false}"
+                    }
+                }
+            }
+        },
+        "/markdownStore/getArticleDetail": {
+            "get": {
+                "tags": [
+                    "markdownStore"
+                ],
+                "description": "获取详情",
+                "operationId": "MarkdownStore.GetDetail",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "languageId",
+                        "description": "文章ID",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "query",
+                        "name": "contentId",
+                        "description": "文章id",
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"list\":  List,\"count\": count}"
+                    },
+                    "nil": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/markdownStore/getArticleList": {
+            "get": {
+                "tags": [
+                    "markdownStore"
+                ],
+                "description": "查询指定用户指定分类的文章,也可以查询指定客户所有的文章",
+                "operationId": "MarkdownStore.GetMarkdownList",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "languageId",
+                        "description": "文章ID",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "query",
+                        "name": "page",
+                        "description": "文章第几页",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "query",
+                        "name": "pageSize",
+                        "description": "一个分页文章的文章个数",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "query",
+                        "name": "isBrief",
+                        "description": "查询简介的列表还是详情的列表，默认查询简介",
+                        "type": "boolean"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"list\":  List,\"count\": count}"
+                    },
+                    "nil": {
+                        "description": ""
+                    }
+                }
+            }
+        },
         "/user/login": {
             "post": {
                 "tags": [
