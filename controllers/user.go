@@ -19,17 +19,19 @@ type LoginModal struct {
 	PassWord string `json:"passWord"`
 }
 
-func (u *UserController) Index2() string {
-	return "测试一下"
+func (u *UserController) URLMapping() {
+	u.Mapping("Login", u.Login)
+	u.Mapping("Logout", u.Logout)
+	u.Mapping("Register", u.Register)
 }
 
 // @Title Login
 // @Description Logs user into the system
 // @Param	username		query 	string	true		"The username for login"
 // @Param	password		query 	string	true		"The password for login"
-// @Success 200 {string} login success
+// @Success 200 {userName,password,userId} login success
 // @Failure 403 user not exist
-// @router /login [Post]
+// @router /login [post]
 func (u *UserController) Login() {
 	var remember CookieRemember
 	var loginObj LoginModal
@@ -54,7 +56,10 @@ func (u *UserController) Login() {
 	u.ServeJSON()
 }
 
-//退出登录,清除登录cookie和session
+// @Title Logout
+// @Description 退出登录,清除登录cookie和session
+// @Success 200 {"res": true,"msg": "退出登录",}
+// @router /logout [get]
 func (u *UserController) Logout() {
 	u.SetMember(models.User{})
 	u.SetSecureCookie(common2.AppKey(), "login", "", -3600)
@@ -67,6 +72,14 @@ func (u *UserController) Logout() {
 	u.ServeJSON()
 }
 
+// @Title Register
+// @Description 账号注册
+// @Param Username query string "The Username for register"
+// @Param Password query string "The Password for register"
+// @Param ConfirmPassword query string "The ConfirmPassword for register"
+// @Success 200 {userName,password,userId}
+// @Failure 注册失败
+// @router /register [post]
 func (u *UserController) Register() {
 	var addUser models.AddUser
 	data := u.Ctx.Input.RequestBody

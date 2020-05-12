@@ -1,3 +1,7 @@
+// @APIVersion 1.0.0
+// @Title mobile API
+// @Description mobile has every tool to get any job done, so codename for the new mobile APIs.
+// @Contact astaxie@gmail.com
 package routers
 
 import (
@@ -6,21 +10,26 @@ import (
 )
 
 func init() {
-	// web入口
-	beego.Router("/", &controllers.HomeController{}, "*:Index")
+	ns := beego.NewNamespace("/v1",
 
-	//登录、注册、修改用户资料
-	beego.Router("/login", &controllers.UserController{}, "post:Login")
-	beego.Router("/logout", &controllers.UserController{}, "get:Logout")
-	beego.Router("/register", &controllers.UserController{}, "post:Register")
+		beego.NSNamespace("/user",
+			beego.NSInclude(
+				&controllers.UserController{},
+			),
+		),
+		beego.NSNamespace("/language",
+			beego.NSInclude(
+				&controllers.Language{},
+			),
+		),
+		beego.NSNamespace("/markdownStore",
+			beego.NSInclude(
+				&controllers.MarkdownStore{},
+			),
+		),
+	)
+	beego.AddNamespace(ns)
 
-	// 文章
-	beego.Router("/editArticle", &controllers.MarkdownStore{}, "post:Edit")
-	beego.Router("/getArticleList", &controllers.MarkdownStore{}, "get:GetMarkdownList")
-	beego.Router("/getArticleDetail", &controllers.MarkdownStore{}, "get:GetDetail")
-	beego.Router("/deleteArticle", &controllers.MarkdownStore{}, "post:DeletePage")
+	beego.SetStaticPath("/swagger", "swagger")
 
-	// 语言
-	beego.Router("/getLanguageList", &controllers.Language{}, "get:GetLanguageList")
-	beego.Router("/editLanguage", &controllers.Language{}, "post:Edit")
 }
