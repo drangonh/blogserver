@@ -23,9 +23,10 @@ func sysInit() {
 	beego.BConfig.WebConfig.StaticDir["uploads"] = uploads
 
 	//设置文档资源路径
-	if beego.BConfig.RunMode == "dev" {
-		beego.SetStaticPath("/swagger", "swagger")
-	}
+	beego.SetStaticPath("/swagger", "swagger")
+	//if beego.BConfig.RunMode == "dev" {
+	//	beego.SetStaticPath("/swagger", "swagger")
+	//}
 
 	//注册views中需要调用的后端的函数
 	registerFunctions()
