@@ -27,10 +27,10 @@ func (m *MarkdownStore) URLMapping() {
 
 // @Title Edit
 // @Description 新增或者插入新的文章
-// @Param languageId query int "文章ID"
-// @Param content query string "文章内容"
-// @Param storeTitle query string "文章标题"
-// @Param htmlContent query string "文章内容对应的html"
+// @Param languageId formData int true "文章ID"
+// @Param content formData string  true "文章内容"
+// @Param storeTitle formData string  true "文章标题"
+// @Param htmlContent formData string true "文章内容对应的html"
 // @Success 200 {"result": true, "msg": "新增成功"}
 // @Failure {"result": false}
 // @router /editArticle [post]
@@ -50,10 +50,10 @@ func (m *MarkdownStore) Edit() {
 
 // @Title GetMarkdownList
 // @Description 查询指定用户指定分类的文章,也可以查询指定客户所有的文章
-// @Param languageId query int "文章ID"
-// @Param page query int "文章第几页"
-// @Param pageSize query int "一个分页文章的文章个数"
-// @Param isBrief query bool "查询简介的列表还是详情的列表，默认查询简介"
+// @Param languageId query int true "文章ID"
+// @Param page query int true "文章第几页"
+// @Param pageSize query int true "一个分页文章的文章个数"
+// @Param isBrief query bool true "查询简介的列表还是详情的列表，默认查询简介"
 // @Success 200 {"list":  List,"count": count}
 // @Failure nil
 // @router /getArticleList [get]
@@ -108,8 +108,8 @@ func (m *MarkdownStore) GetMarkdownList() {
 
 // @Title GetDetail
 // @Description 获取详情
-// @Param languageId query int "文章ID"
-// @Param contentId query int "文章id"
+// @Param languageId query int true "文章ID"
+// @Param contentId query int true "文章id"
 // @Success 200 {"list":  List,"count": count}
 // @Failure nil
 // @router /getArticleDetail [get]
@@ -131,7 +131,7 @@ func (m *MarkdownStore) GetDetail() {
 
 // @Title DeletePage
 // @Description 删除文章
-// @Param contentId query int "文章id"
+// @Param contentId formData int true "文章id"
 // @Success 200 true
 // @Failure nil
 // @router /deleteArticle [post]

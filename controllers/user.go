@@ -27,8 +27,8 @@ func (u *UserController) URLMapping() {
 
 // @Title Login
 // @Description Logs user into the system
-// @Param	username		query 	string	true		"The username for login"
-// @Param	password		query 	string	true		"The password for login"
+// @Param	username		formData 	string	true		"The username for login"
+// @Param	password		formData 	string	true		"The password for login"
 // @Success 200 {userName,password,userId} login success
 // @Failure 403 user not exist
 // @router /login [post]
@@ -74,9 +74,9 @@ func (u *UserController) Logout() {
 
 // @Title Register
 // @Description 账号注册
-// @Param Username query string "The Username for register"
-// @Param Password query string "The Password for register"
-// @Param ConfirmPassword query string "The ConfirmPassword for register"
+// @Param Username formData string true "The Username for register"
+// @Param Password formData string true "The Password for register"
+// @Param ConfirmPassword formData string true "The ConfirmPassword for register"
 // @Success 200 {userName,password,userId}
 // @Failure 注册失败
 // @router /register [post]

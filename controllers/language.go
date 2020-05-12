@@ -12,14 +12,10 @@ type Language struct {
 	BaseController
 }
 
-// 语言
-//beego.Router("/getLanguageList", &controllers.Language{}, "get:GetLanguageList")
-//beego.Router("/editLanguage", &controllers.Language{}, "post:Edit")
-
 // @Title Edit
 // @Description 语言编辑或者新增
-// @Param languageTitle query string "语言标题"
-// @Param languageContent query string "语言简介"
+// @Param languageTitle formData  string true "语言标题"
+// @Param languageContent formData string true "语言简介"
 // @Success 200 true
 // @Failure nil
 // @router /editLanguage [post]

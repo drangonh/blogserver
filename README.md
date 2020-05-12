@@ -24,3 +24,6 @@
 
 ### 项目运行
 * bee run main.go，使用go run无法还在beego中的默认配置(app.conf)
+
+### API文档生成命令
+* bee run -gendoc=true -downdoc=true，这会生成一个swagger目录，只有在测试环境中才会生成该文档
