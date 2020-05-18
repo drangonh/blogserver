@@ -27,3 +27,6 @@
 
 ### API文档生成命令
 * bee run -gendoc=true -downdoc=true，这会生成一个swagger目录，只有在测试环境中才会生成该文档
+
+### API文档地址
+* http://localhost:8888/swagger/#!
