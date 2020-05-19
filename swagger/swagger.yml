@@ -152,6 +152,33 @@ paths:
           description: '{"list":  List,"count": count}'
         nil:
           description: ""
+  /profile/editUserProfile:
+    post:
+      tags:
+      - profile
+      description: 更新或者修改用户信息
+      operationId: ProfileController.EditUserProfile
+      parameters:
+      - in: formData
+        name: avatar
+        description: 用户头像
+        required: true
+        type: string
+      - in: formData
+        name: email
+        description: 用户邮箱
+        required: true
+        type: string
+      - in: formData
+        name: description
+        description: 用户描述
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '{userName,password,userId}'
+        注册失败:
+          description: ""
   /user/login:
     post:
       tags:

@@ -30,6 +30,11 @@ func init() {
 				&controllers.MarkdownStore{},
 			),
 		),
+		beego.NSNamespace("/profile",
+			beego.NSInclude(
+				&controllers.ProfileController{},
+			),
+		),
 	)
 	beego.AddNamespace(ns)
 }

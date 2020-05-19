@@ -6,19 +6,23 @@ import (
 	"fmt"
 	"github.com/astaxie/beego/orm"
 	"strings"
+	"time"
 )
 
 type User struct {
-	UserId   int    `orm:"pk;auto;column(userId)" json:"userId"`
-	Username string `orm:"size(30),unique;column(userName)" json:"userName"`
-	Password string `orm:"size(50),unique;column(passWord)" json:"passWord"`
+	UserId        int       `orm:"pk;auto;column(userId)" json:"userId"`
+	Username      string    `orm:"size(30),unique;column(userName)" json:"userName"`
+	Password      string    `orm:"size(50),unique;column(passWord)" json:"passWord"`
+	LastLoginTime time.Time `orm:"type(datetime);column(lastLoginTime);null" json:"lastLoginTime"`
+	//LastLoginTime time.Time `orm:"type(datetime);column(lastLoginTime)" json:"lastLoginTime"` //如果不是
+	//Profile       *Profile  `orm:"reverse(one)"` //// Reverse relationship (optional)
 }
 
 type AddUser struct {
-	UserId          int    `orm:"pk;auto" json:"userId"`
-	Username        string `orm:"size(30) unique" json:"userName"`
-	Password        string `orm:"size(50) unique" json:"passWord"`
-	ConfirmPassword string `orm:"size(50) unique" json:"confirmPassWord"`
+	UserId          int    `json:"userId"`
+	Username        string `json:"userName"`
+	Password        string `json:"passWord"`
+	ConfirmPassword string `json:"confirmPassWord"`
 }
 
 //orm 回调
@@ -33,6 +37,14 @@ func NewUser() *User {
 func (m *User) Login(userName, password string) (*User, error) {
 	member := &User{}
 	err := orm.NewOrm().QueryTable(m.TableName()).Filter("userName", userName).One(member)
+
+	member.LastLoginTime = time.Now().Local()
+
+	// 更新登录时间
+	_, err = orm.NewOrm().Update(member, "lastLoginTime")
+	if err != nil {
+		return nil, err
+	}
 
 	if err != nil {
 		return member, errors.New("用户不存在")

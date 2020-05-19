@@ -6,6 +6,9 @@ import (
 	"github.com/astaxie/beego"
 )
 
+//正则表达式
+const RegexpEmail = `^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$`
+
 // session
 const SessionName = "blog_server"
 

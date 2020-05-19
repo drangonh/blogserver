@@ -44,8 +44,6 @@ func (c *MarkdownStoreModel) Edit(str ...string) (err error) {
 	fmt.Println("简介：：：", c.Brief)
 	if one.ContentId > 0 {
 		_, err = o.Update(c, str...)
-		fmt.Println(err)
-
 	} else {
 		_, err = o.Insert(c)
 	}

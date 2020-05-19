@@ -12,9 +12,11 @@ import "github.com/astaxie/beego/orm"
 
 func init() {
 	orm.RegisterModel(
-		new(User),
+
+		new(Profile),
 		new(LanguageModel),
 		new(MarkdownStoreModel),
+		new(User),
 	)
 }
 
@@ -25,6 +27,11 @@ func init() {
 // 用户表
 func TNUser() string {
 	return "user"
+}
+
+// 用户信息表
+func TNProfile() string {
+	return "user_profile"
 }
 
 // 计算机开发语言表
