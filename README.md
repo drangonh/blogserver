@@ -30,3 +30,6 @@
 
 ### API文档地址
 * http://localhost:8888/swagger/#!
+
+### 阿里云
+* go get github.com/aliyun/aliyun-oss-go-sdk/oss
