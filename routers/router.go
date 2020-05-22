@@ -35,6 +35,11 @@ func init() {
 				&controllers.ProfileController{},
 			),
 		),
+		beego.NSNamespace("/oss",
+			beego.NSInclude(
+				&controllers.OSSController{},
+			),
+		),
 	)
 	beego.AddNamespace(ns)
 }

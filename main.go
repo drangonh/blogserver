@@ -3,7 +3,7 @@ package main
 import (
 	_ "blogserver/routers"
 	_ "blogserver/sysinit"
-	"fmt"
+	_ "blogserver/utils/oss"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/plugins/cors"
 )
@@ -41,13 +41,6 @@ func main() {
 			"Content-Type"},
 		AllowCredentials: true,
 	}))
-
-	var n uint8
-	n = 255
-	s := "测试"
-	s1 := "abc"
-	s2 := "AVC"
-	fmt.Println(len(s), len(s1), len(s2), n)
 
 	beego.Run()
 

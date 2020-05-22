@@ -70,6 +70,15 @@ func init() {
 			Filters:          nil,
 			Params:           nil})
 
+	beego.GlobalControllerRouter["blogserver/controllers:OSSController"] = append(beego.GlobalControllerRouter["blogserver/controllers:OSSController"],
+		beego.ControllerComments{
+			Method:           "UploadImage",
+			Router:           `/uploadImage`,
+			AllowHTTPMethods: []string{"post"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
 	beego.GlobalControllerRouter["blogserver/controllers:ProfileController"] = append(beego.GlobalControllerRouter["blogserver/controllers:ProfileController"],
 		beego.ControllerComments{
 			Method:           "EditUserProfile",
