@@ -32,17 +32,23 @@ func (m *Profile) EditProfile(strS ...string) (info *Profile, err error) {
 		return nil, errors.New("邮箱格式错误")
 	}
 
-	//cond := orm.NewCondition().Or("email", m.Email).Or("nickName", m.NickName).Or("uid", m.Uid)
-	cond := orm.NewCondition().Or("uid", m.Uid)
-	var one Profile
+	cond := orm.NewCondition().Or("email", m.Email).Or("nickName", m.NickName).Or("uid", m.Uid)
+	one := &Profile{}
 	o := GetOrm("w")
-	if o.QueryTable(m.TableName()).SetCond(cond).One(&one); one.Id > 0 {
-		//if one.Uid == m.Uid {
-		//	return errors.New("用户已存在")
-		//}
+	err = o.QueryTable(m.TableName()).SetCond(cond).One(one)
+
+	if one.NickName == m.NickName {
+		return nil, errors.New("用户名已被使用")
+	}
+
+	if one.Email == m.Email {
+		return nil, errors.New("邮箱已被使用")
+	}
+
+	if one.Id > 0 {
 		//修改用户信息
-		sql := "UPDATE user_profile SET avatar = ?, email = ?, description = ?, nickName = ? WHERE id = ?"
-		_, err = o.Raw(sql, m.Avatar, m.Email, m.Description, m.NickName, one.Id).Exec()
+		m.Id = one.Id
+		_, err = o.Update(m, strS...)
 		if err != nil {
 			return nil, err
 		}
@@ -52,5 +58,5 @@ func (m *Profile) EditProfile(strS ...string) (info *Profile, err error) {
 			return nil, err
 		}
 	}
-	return &one, nil
+	return m, nil
 }
