@@ -4,6 +4,7 @@ import (
 	"blogserver/models"
 	"blogserver/utils/common"
 	"encoding/json"
+	"fmt"
 )
 
 type ProfileController struct {
@@ -29,6 +30,7 @@ func (u *ProfileController) EditUserProfile() {
 	json.Unmarshal(data, &profile)
 	profile.Uid = u.User.UserId
 
+	fmt.Println(profile)
 	info, err := profile.EditProfile("avatar", "email", "description", "nickName")
 	if nil != err {
 		u.Data["json"] = common.ResultHandle(nil, err)

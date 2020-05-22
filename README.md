@@ -33,3 +33,7 @@
 
 ### 阿里云
 * go get github.com/aliyun/aliyun-oss-go-sdk/oss
+
+### 时区导致数据库中的时间比本地时间慢8个小时
+* 解决办法在beego的注册数据库时加上&loc=Local，如下所示 
+* ```dataSource := dbUser + ":" + dbPwd + "@tcp(" + dbHost + ":" + dbPort + ")/" + dbName + "?charset=utf8&loc=Local"```

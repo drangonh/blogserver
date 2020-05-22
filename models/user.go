@@ -70,8 +70,9 @@ func (m *User) AddUser(add AddUser) (*User, error) {
 		return nil, errors.New("两次输入的密码请确保一致")
 	}
 
+	fmt.Println(add)
 	if l := strings.Count(add.Password, ""); l < 6 || l >= 20 {
-		return nil, errors.New("密码请输入6-20个字符")
+		return nil, errors.New("请输入6-20位密码")
 	}
 
 	//start,查询账号是否存在

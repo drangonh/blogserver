@@ -57,7 +57,7 @@ func registerDatabase(alias string) {
 	dbPort := beego.AppConfig.String("db_" + alias + "_port")
 
 	//	orm.RegisterDataBase("default", "mysql", "root:yn666666@tcp(localhost:3306)/blogserver?charset=utf8", 30)
-	dataSource := dbUser + ":" + dbPwd + "@tcp(" + dbHost + ":" + dbPort + ")/" + dbName + "?charset=utf8"
+	dataSource := dbUser + ":" + dbPwd + "@tcp(" + dbHost + ":" + dbPort + ")/" + dbName + "?charset=utf8&loc=Local"
 	fmt.Println(dataSource)
 	orm.RegisterDataBase(dbAlias, "mysql", dataSource, 30)
 }

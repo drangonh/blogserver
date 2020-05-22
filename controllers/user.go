@@ -84,7 +84,10 @@ func (u *UserController) Register() {
 	var addUser models.AddUser
 	data := u.Ctx.Input.RequestBody
 	json.Unmarshal(data, &addUser) //解析二进制json，把结果放进ob中
-	user := &models.User{Username: addUser.Username, Password: addUser.Password}
+	user := &models.User{Username: addUser.Username, Password: addUser.Password, LastLoginTime: time.Now()}
+
+	fmt.Println(addUser)
+
 	res, err := user.AddUser(addUser) //这是添加用户函数
 	if nil != err {
 		fmt.Println(err)
