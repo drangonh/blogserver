@@ -220,6 +220,7 @@ func CrawlFile(filelink string, savefolder string, timeout ...int) (file string,
 
 func ResultHandle(obj interface{}, err error) map[string]interface{} {
 	fmt.Println(obj, err)
+
 	if err != nil {
 		return map[string]interface{}{
 			"err":  err.Error(),
