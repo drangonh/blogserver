@@ -34,28 +34,33 @@ func NewUser() *User {
 	return &User{}
 }
 
-func (m *User) Login(userName, password string) (*User, error) {
+func (m *User) Login(userName, password string) (*Profile, error) {
+	o := GetOrm("w")
 	member := &User{}
-	err := orm.NewOrm().QueryTable(m.TableName()).Filter("userName", userName).One(member)
+	err := o.QueryTable(m.TableName()).Filter("userName", userName).One(member)
 
 	member.LastLoginTime = time.Now().Local()
 
 	// 更新登录时间
-	_, err = orm.NewOrm().Update(member, "lastLoginTime")
+	_, err = o.Update(member, "lastLoginTime")
 	if err != nil {
 		return nil, err
 	}
 
 	if err != nil {
-		return member, errors.New("用户不存在")
+		return nil, errors.New("用户不存在")
 	}
 
 	res, err := utils.PasswordVerify(member.Password, password)
 
 	if res == false {
-		return member, errors.New("密码错误")
+		return nil, errors.New("密码错误")
 	}
-	return member, nil
+
+	var profile *Profile
+
+	o.QueryTable(TNProfile()).Filter("uid", member.UserId).One(profile)
+	return profile, nil
 }
 
 //注册账号

@@ -27,24 +27,30 @@ func NewProfile() *Profile {
 }
 
 // 新增、修改用户信息
-func (m *Profile) EditProfile(strS ...string) (err error) {
+func (m *Profile) EditProfile(strS ...string) (info *Profile, err error) {
 	if ok, err := regexp.MatchString(common2.RegexpEmail, m.Email); !ok || err != nil || m.Email == "" {
-		return errors.New("邮箱格式错误")
+		return nil, errors.New("邮箱格式错误")
 	}
 
 	//cond := orm.NewCondition().Or("email", m.Email).Or("nickName", m.NickName).Or("uid", m.Uid)
 	cond := orm.NewCondition().Or("uid", m.Uid)
 	var one Profile
 	o := GetOrm("w")
-	if o.QueryTable(m.TableName()).SetCond(cond).One(&one, "uid", "id"); one.Id > 0 {
+	if o.QueryTable(m.TableName()).SetCond(cond).One(&one); one.Id > 0 {
 		//if one.Uid == m.Uid {
 		//	return errors.New("用户已存在")
 		//}
 		//修改用户信息
 		sql := "UPDATE user_profile SET avatar = ?, email = ?, description = ?, nickName = ? WHERE id = ?"
 		_, err = o.Raw(sql, m.Avatar, m.Email, m.Description, m.NickName, one.Id).Exec()
+		if err != nil {
+			return nil, err
+		}
 	} else {
 		_, err = o.Insert(m)
+		if err != nil {
+			return nil, err
+		}
 	}
-	return
+	return &one, nil
 }

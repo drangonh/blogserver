@@ -29,11 +29,11 @@ func (u *ProfileController) EditUserProfile() {
 	json.Unmarshal(data, &profile)
 	profile.Uid = u.User.UserId
 
-	err := profile.EditProfile("avatar", "email", "description", "nickName")
+	info, err := profile.EditProfile("avatar", "email", "description", "nickName")
 	if nil != err {
 		u.Data["json"] = common.ResultHandle(nil, err)
 	} else {
-		u.Data["json"] = common.ResultHandle(true, nil)
+		u.Data["json"] = common.ResultHandle(info, nil)
 	}
 	u.ServeJSON()
 }

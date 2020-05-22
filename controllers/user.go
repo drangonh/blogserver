@@ -42,7 +42,7 @@ func (u *UserController) Login() {
 		u.Data["json"] = common.ResultHandle(user, nil)
 
 		//登录成功之后设置加密的cookie
-		remember.UserId = user.UserId
+		remember.UserId = user.Uid
 		remember.Time = time.Now()
 		v, _ := utils.Encode(remember)
 
