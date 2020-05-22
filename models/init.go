@@ -8,7 +8,10 @@
 
 package models
 
-import "github.com/astaxie/beego/orm"
+import (
+	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/orm"
+)
 
 func init() {
 	orm.RegisterModel(
@@ -42,4 +45,23 @@ func TNLanguage() string {
 // 文章表
 func TNMarkdownStore() string {
 	return "markdown_store"
+}
+
+/*
+* Tool Funcs
+* */
+//获取orm对象
+//@param alias 数据库alias
+func GetOrm(alias string) orm.Ormer {
+	o := orm.NewOrm()
+	if len(alias) > 0 {
+		beego.Debug("Using Alias : " + alias)
+		if "w" == alias {
+			o.Using("default")
+		} else {
+			o.Using(alias)
+		}
+	}
+
+	return o
 }

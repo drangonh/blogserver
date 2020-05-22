@@ -10,10 +10,11 @@ import (
 //用户信息详情表
 type Profile struct {
 	Id          int    `orm:"pk;auto" json:"id"`
-	Avatar      string `orm:"size(30),unique;column(avatar)" json:"avatar"`
+	Avatar      string `orm:"size(30);column(avatar)" json:"avatar"`
 	Email       string `orm:"size(100);unique" json:"email"`
 	Description string `orm:"column(description)" json:"description"`
-	User        *User  `orm:"rel(one)" json:"userId"`
+	NickName    string `orm:"size(30);unique;column(nickName)" json:"nickName"`
+	Uid         int    `orm:"column(uid);unique" json:"uid"`
 }
 
 //orm 回调
@@ -31,20 +32,17 @@ func (m *Profile) EditProfile(strS ...string) (err error) {
 		return errors.New("邮箱格式错误")
 	}
 
-	o := orm.NewOrm()
-
-	// 查询数据库是否存在该条数据,外键在数据库中会自动加"_id"
-	p := &Profile{User: m.User}
-	o.Read(p, "user_id")
-
-	if err != nil {
-		return
-	}
-
-	if p.Id > 0 {
+	//cond := orm.NewCondition().Or("email", m.Email).Or("nickName", m.NickName).Or("uid", m.Uid)
+	cond := orm.NewCondition().Or("uid", m.Uid)
+	var one Profile
+	o := GetOrm("w")
+	if o.QueryTable(m.TableName()).SetCond(cond).One(&one, "uid", "id"); one.Id > 0 {
+		//if one.Uid == m.Uid {
+		//	return errors.New("用户已存在")
+		//}
 		//修改用户信息
-		sql := "UPDATE user_profile SET avatar = ?, email = ?, description = ? WHERE id = ?"
-		_, err = o.Raw(sql, m.Avatar, m.Email, m.Description, p.Id).Exec()
+		sql := "UPDATE user_profile SET avatar = ?, email = ?, description = ?, nickName = ? WHERE id = ?"
+		_, err = o.Raw(sql, m.Avatar, m.Email, m.Description, m.NickName, one.Id).Exec()
 	} else {
 		_, err = o.Insert(m)
 	}

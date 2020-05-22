@@ -6,6 +6,7 @@ import (
 
 type LanguageModel struct {
 	LanguageId      int    `orm:"pk;auto;column(languageId)" json:"languageId"`
+	Pid             int    `orm:"column(pid)" json:"pid"` //父级id，实现无限极分类
 	UserId          int    `orm:"column(userId)" json:"userId"`
 	LanguageTitle   string `orm:"type(text);column(languageTitle);unique" json:"languageTitle"` //语言标题
 	LanguageContent string `orm:"type(text);column(languageContent)" json:"languageContent"`    //语言简洁
