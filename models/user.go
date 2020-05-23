@@ -38,6 +38,9 @@ func (m *User) Login(userName, password string) (*Profile, error) {
 	o := GetOrm("w")
 	member := &User{}
 	err := o.QueryTable(m.TableName()).Filter("userName", userName).One(member)
+	if err != nil && member.UserId <= 0 {
+		return nil, errors.New("用户不存在")
+	}
 
 	member.LastLoginTime = time.Now().Local()
 
@@ -47,19 +50,18 @@ func (m *User) Login(userName, password string) (*Profile, error) {
 		return nil, err
 	}
 
-	if err != nil {
-		return nil, errors.New("用户不存在")
-	}
-
 	res, err := utils.PasswordVerify(member.Password, password)
 
 	if res == false {
 		return nil, errors.New("密码错误")
 	}
 
-	var profile *Profile
+	profile := &Profile{}
 
 	o.QueryTable(TNProfile()).Filter("uid", member.UserId).One(profile)
+	if profile.Id <= 0 {
+		profile.Uid = member.UserId
+	}
 	return profile, nil
 }
 
