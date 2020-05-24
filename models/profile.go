@@ -3,6 +3,7 @@ package models
 import (
 	common2 "blogserver/common"
 	"errors"
+	"fmt"
 	"github.com/astaxie/beego/orm"
 	"regexp"
 )
@@ -29,11 +30,13 @@ func NewProfile() *Profile {
 // 新增、修改用户信息
 func (m *Profile) EditProfile(strS ...string) (info *Profile, err error) {
 	if ok, err := regexp.MatchString(common2.RegexpEmail, m.Email); !ok || err != nil || m.Email == "" {
+
+		fmt.Println(err, m.Email)
 		return nil, errors.New("邮箱格式错误")
 	}
 
 	cond := orm.NewCondition().Or("email", m.Email).Or("nickName", m.NickName).Or("uid", m.Uid)
-	one := &Profile{}
+	one := NewProfile()
 	o := GetOrm("w")
 	err = o.QueryTable(m.TableName()).SetCond(cond).One(one)
 
