@@ -15,7 +15,7 @@ import (
 
 func init() {
 	orm.RegisterModel(
-		//new(OSS),
+		new(OSS),
 		new(Profile),
 		new(LanguageModel),
 		new(MarkdownStoreModel),

@@ -32,10 +32,10 @@ func NewOSS() *OSS {
 func (o *OSS) GetOSSInfo() (oss *OSS, err error) {
 	orm := GetOrm("w")
 
-	ossList := make([]*OSS, 2)
-	num, err := orm.QueryTable(o.TableName()).All(ossList)
+	ossList := []OSS{}
+	num, err := orm.QueryTable(o.TableName()).All(&ossList)
 	if num > 0 && err == nil {
-		return ossList[0], err
+		return &ossList[0], err
 	}
 	return
 }

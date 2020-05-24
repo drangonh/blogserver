@@ -152,29 +152,50 @@ paths:
           description: '{"list":  List,"count": count}'
         nil:
           description: ""
-  /oss/uploadImage:
+  /oss/editOss:
     post:
       tags:
       - oss
-      description: 图片上传
-      operationId: OSSController.UploadImage
+      description: 新增或者编辑oss信息
+      operationId: OSSController.EditInfo
       parameters:
       - in: formData
-        name: fileName
-        description: 文件名
-        required: true
-        type: string
-      - in: formData
-        name: path
-        description: 文件路径
-        required: true
-        type: string
-      - in: formData
-        name: fileType
-        description: 文件类型
+        name: uid
+        description: 用户ID
         required: true
         type: integer
         format: int64
+      - in: formData
+        name: endpoint
+        description: Your region:类似：oss-cn-hangzhou
+        required: true
+        type: string
+      - in: formData
+        name: accessKeyId
+        description: Your AccessKeyId
+        required: true
+        type: string
+      - in: formData
+        name: accessKeySecret
+        description: Your AccessKeySecret
+        required: true
+        type: string
+      - in: formData
+        name: bucketName
+        description: Your bucket name
+        required: true
+        type: string
+      responses:
+        "200":
+          description: "true"
+        nil:
+          description: ""
+  /oss/ossInfo:
+    get:
+      tags:
+      - oss
+      description: 获取oss信息
+      operationId: OSSController.OssInfo
       responses:
         "200":
           description: "true"
