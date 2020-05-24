@@ -3,7 +3,6 @@ package main
 import (
 	_ "blogserver/routers"
 	_ "blogserver/sysinit"
-	_ "blogserver/utils/oss"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/plugins/cors"
 )

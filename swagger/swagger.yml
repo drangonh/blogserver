@@ -152,6 +152,34 @@ paths:
           description: '{"list":  List,"count": count}'
         nil:
           description: ""
+  /oss/uploadImage:
+    post:
+      tags:
+      - oss
+      description: 图片上传
+      operationId: OSSController.UploadImage
+      parameters:
+      - in: formData
+        name: fileName
+        description: 文件名
+        required: true
+        type: string
+      - in: formData
+        name: path
+        description: 文件路径
+        required: true
+        type: string
+      - in: formData
+        name: fileType
+        description: 文件类型
+        required: true
+        type: integer
+        format: int64
+      responses:
+        "200":
+          description: "true"
+        nil:
+          description: ""
   /profile/editUserProfile:
     post:
       tags:
@@ -167,6 +195,11 @@ paths:
       - in: formData
         name: email
         description: 用户邮箱
+        required: true
+        type: string
+      - in: formData
+        name: nickName
+        description: 用户昵称
         required: true
         type: string
       - in: formData

@@ -15,7 +15,7 @@ import (
 
 func init() {
 	orm.RegisterModel(
-
+		//new(OSS),
 		new(Profile),
 		new(LanguageModel),
 		new(MarkdownStoreModel),
@@ -45,6 +45,11 @@ func TNLanguage() string {
 // 文章表
 func TNMarkdownStore() string {
 	return "markdown_store"
+}
+
+// 阿里云oss账号密码表
+func TNOSSStore() string {
+	return "oss"
 }
 
 /*

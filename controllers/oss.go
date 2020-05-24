@@ -1,8 +1,8 @@
 package controllers
 
 import (
+	"blogserver/models"
 	"blogserver/utils/common"
-	"blogserver/utils/oss"
 	"encoding/json"
 )
 
@@ -10,31 +10,42 @@ type OSSController struct {
 	BaseController
 }
 
-type UpLoad struct {
-	fileName string
-	path     string
-	fileType int
-}
-
-// @Title UploadImage
-// @Description 图片上传
-// @Param fileName formData string true "文件名"
-// @Param path formData string true "文件路径"
-// @Param fileType formData int true "文件类型"
-// formData 表示是 post 请求的数据，query 表示带在 url 之后的参数，path 表示请求路径上得参数，
-// 例如上面例子里面的 key，body 表示是一个 raw 数据请求，header 表示带在 header 信息中得参数。
+// @Title OssInfo
+// @Description 获取oss信息
 // @Success 200 true
 // @Failure nil
-// @router /uploadImage [post]
-func (o *OSSController) UploadImage() {
-	obj := &UpLoad{}
-	data := o.Ctx.Input.RequestBody
-	json.Unmarshal(data, &obj)
+// @router /ossInfo [get]
+func (o *OSSController) OssInfo() {
+	oss := models.NewOSS()
+	info, err := oss.GetOSSInfo()
+	if err != nil {
+		o.Data["json"] = common.ResultHandle(nil, err)
+	} else {
+		o.Data["json"] = common.ResultHandle(info, nil)
+	}
+	o.ServeJSON()
+}
 
-	err := oss.UploadFile(obj.fileName, obj.path, obj.fileType)
+// @Title EditInfo
+// @Description 新增或者编辑oss信息
+// @Param uid formData int true "用户ID"
+// @Param endpoint formData string true "Your region:类似：oss-cn-hangzhou"
+// @Param accessKeyId formData string true "Your AccessKeyId"
+// @Param accessKeySecret formData string true "Your AccessKeySecret"
+// @Param bucketName formData string true "Your bucket name"
+// @Success 200 true
+// @Failure nil
+// @router /editOss [post]
+func (o *OSSController) EditInfo() {
+	oss := models.NewOSS()
+	data := o.Ctx.Input.RequestBody
+	json.Unmarshal(data, oss)
+
+	err := oss.Edit()
 	if err != nil {
 		o.Data["json"] = common.ResultHandle(nil, err)
 	} else {
 		o.Data["json"] = common.ResultHandle(true, nil)
 	}
+	o.ServeJSON()
 }

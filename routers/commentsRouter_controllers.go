@@ -72,9 +72,18 @@ func init() {
 
 	beego.GlobalControllerRouter["blogserver/controllers:OSSController"] = append(beego.GlobalControllerRouter["blogserver/controllers:OSSController"],
 		beego.ControllerComments{
-			Method:           "UploadImage",
-			Router:           `/uploadImage`,
+			Method:           "EditInfo",
+			Router:           `/editOss`,
 			AllowHTTPMethods: []string{"post"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
+	beego.GlobalControllerRouter["blogserver/controllers:OSSController"] = append(beego.GlobalControllerRouter["blogserver/controllers:OSSController"],
+		beego.ControllerComments{
+			Method:           "OssInfo",
+			Router:           `/ossInfo`,
+			AllowHTTPMethods: []string{"get"},
 			MethodParams:     param.Make(),
 			Filters:          nil,
 			Params:           nil})
