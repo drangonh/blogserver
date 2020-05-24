@@ -15,8 +15,8 @@ type UserController struct {
 }
 
 type LoginModal struct {
-	UserName string `json:"userName"`
-	PassWord string `json:"passWord"`
+	UserName string `orm:"column(userName)" json:"userName"`
+	PassWord string `orm:"column(passWord)" json:"passWord"`
 }
 
 func (u *UserController) URLMapping() {
@@ -27,8 +27,8 @@ func (u *UserController) URLMapping() {
 
 // @Title Login
 // @Description Logs user into the system
-// @Param	username		formData 	string	true		"The username for login"
-// @Param	password		formData 	string	true		"The password for login"
+// @Param	userName		formData 	string	true		"The username for login"
+// @Param	passWord		formData 	string	true		"The password for login"
 // @Success 200 {userName,password,userId} login success
 // @Failure 403 user not exist
 // @router /login [post]
@@ -81,6 +81,7 @@ func (u *UserController) Logout() {
 // @Failure 注册失败
 // @router /register [post]
 func (u *UserController) Register() {
+	var remember CookieRemember
 	var addUser models.AddUser
 	data := u.Ctx.Input.RequestBody
 	json.Unmarshal(data, &addUser) //解析二进制json，把结果放进ob中
@@ -94,6 +95,13 @@ func (u *UserController) Register() {
 
 		u.Data["json"] = common.ResultHandle(nil, err)
 	} else {
+		//登录成功之后设置加密的cookie
+		remember.UserId = res.UserId
+		remember.Time = time.Now()
+		v, _ := utils.Encode(remember)
+		//登录成功设置cookie
+		u.SetSecureCookie(common2.AppKey(), "login", v, common2.CookieMastLiftTime)
+
 		u.Data["json"] = common.ResultHandle(res, nil)
 	}
 	u.ServeJSON()

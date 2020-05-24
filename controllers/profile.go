@@ -30,6 +30,7 @@ func (u *ProfileController) EditUserProfile() {
 	json.Unmarshal(data, &profile)
 
 	fmt.Println(profile)
+	profile.Uid = u.User.UserId
 	info, err := profile.EditProfile("avatar", "email", "description", "nickName")
 
 	if nil != err {

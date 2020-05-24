@@ -11,7 +11,7 @@ import (
 //用户信息详情表
 type Profile struct {
 	Id          int    `orm:"pk;auto" json:"id"`
-	Avatar      string `orm:"size(30);column(avatar)" json:"avatar"`
+	Avatar      string `orm:"column(avatar)" json:"avatar"`
 	Email       string `orm:"size(100);unique" json:"email"`
 	Description string `orm:"column(description)" json:"description"`
 	NickName    string `orm:"size(30);unique;column(nickName)" json:"nickName"`
@@ -29,6 +29,7 @@ func NewProfile() *Profile {
 
 // 新增、修改用户信息
 func (m *Profile) EditProfile(strS ...string) (info *Profile, err error) {
+	fmt.Println("头像长度：：", len(m.Avatar))
 	if ok, err := regexp.MatchString(common2.RegexpEmail, m.Email); !ok || err != nil || m.Email == "" {
 
 		fmt.Println(err, m.Email)

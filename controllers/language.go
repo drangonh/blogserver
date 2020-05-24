@@ -4,6 +4,7 @@ import (
 	"blogserver/models"
 	"blogserver/utils/common"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"strconv"
 )
@@ -29,6 +30,19 @@ func (m *Language) Edit() {
 	data := m.Ctx.Input.RequestBody
 	json.Unmarshal(data, language) //解析二进制json，把结果放进ob中
 	//obj := &models.MarkdownStore{UserId: store.UserId,LanguageId: store.LanguageId,Content: store.Content}
+
+	if language.LanguageTitle == "" {
+		m.Data["json"] = common.ResultHandle(map[string]bool{"result": false}, errors.New("语言标题不能为空"))
+		m.ServeJSON()
+		return
+	}
+
+	if language.LanguageContent == "" {
+		m.Data["json"] = common.ResultHandle(map[string]bool{"result": false}, errors.New("语言简介不能为空"))
+		m.ServeJSON()
+		return
+	}
+
 	language.UserId = m.User.UserId
 
 	err := language.Edit("languageContent", "languageTitle")

@@ -350,14 +350,14 @@
                 "parameters": [
                     {
                         "in": "formData",
-                        "name": "username",
+                        "name": "userName",
                         "description": "The username for login",
                         "required": true,
                         "type": "string"
                     },
                     {
                         "in": "formData",
-                        "name": "password",
+                        "name": "passWord",
                         "description": "The password for login",
                         "required": true,
                         "type": "string"
