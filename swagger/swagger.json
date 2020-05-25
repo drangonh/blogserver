@@ -340,6 +340,23 @@
                 }
             }
         },
+        "/user/getArtAndCatCnt": {
+            "get": {
+                "tags": [
+                    "user"
+                ],
+                "description": "根据用户id获取用户的分类总数和文章总数",
+                "operationId": "UserController.GetArtAndCatCnt",
+                "responses": {
+                    "200": {
+                        "description": "true"
+                    },
+                    "nil": {
+                        "description": ""
+                    }
+                }
+            }
+        },
         "/user/login": {
             "post": {
                 "tags": [

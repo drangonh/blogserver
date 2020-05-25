@@ -106,3 +106,21 @@ func (u *UserController) Register() {
 	}
 	u.ServeJSON()
 }
+
+// @Title GetArtAndCatCnt
+// @Description 根据用户id获取用户的分类总数和文章总数
+// @Success 200 true
+// @Failure nil
+// @router /getArtAndCatCnt [get]
+func (u *UserController) GetArtAndCatCnt() {
+	uid := u.User.UserId
+
+	art, cat, err := models.NewUser().FindArtCatCnt(uid)
+
+	u.Data["json"] = common.ResultHandle(map[string]int{
+		"language": cat,
+		"article":  art,
+	}, err)
+
+	u.ServeJSON()
+}

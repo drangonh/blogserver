@@ -110,3 +110,20 @@ func (m *User) Find(id int) (user *User, err error) {
 	err = o.Read(user)
 	return user, err
 }
+
+func (m *User) FindArtCatCnt(id int) (art, cat int, err error) {
+	//art =
+	o := GetOrm("w")
+	artSql := "select count(contentId) cnt from markdown_store where userId = ?;"
+	err = o.Raw(artSql, id).QueryRow(&art)
+	if err != nil {
+		return 0, 0, err
+	}
+
+	catSql := "select count(languageId) cnt from language where userId = ?;"
+	err = o.Raw(catSql, id).QueryRow(&cat)
+	if err != nil {
+		return art, 0, err
+	}
+	return art, cat, nil
+}
