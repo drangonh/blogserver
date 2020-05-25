@@ -129,6 +129,23 @@ func (m *MarkdownStore) GetDetail() {
 	m.ServeJSON()
 }
 
+func (m *MarkdownStore) GetLastOrNextDetail() {
+	contentId, _ := m.GetInt("contentId")
+	userId := m.User.UserId
+	languageId, _ := m.GetInt("languageId")
+	artType, _ := m.GetInt("artType")
+
+	fmt.Println(contentId, userId, languageId)
+	detail, err := models.NewMarkdownStore().GetLastOrNextDetail(userId, languageId, contentId, artType)
+
+	if err != nil {
+		m.Data["json"] = common.ResultHandle(nil, err)
+	} else {
+		m.Data["json"] = common.ResultHandle(detail, nil)
+	}
+	m.ServeJSON()
+}
+
 // @Title DeletePage
 // @Description 删除文章
 // @Param contentId formData int true "文章id"

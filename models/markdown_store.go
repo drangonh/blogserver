@@ -17,6 +17,16 @@ type MarkdownStoreModel struct {
 	HtmlContent string `orm:"type(text);column(htmlContent)" json:"htmlContent"` //文章内容：markdown内容对应的html，暂时不会存值
 }
 
+// b.contentId,b.userId,b.languageId,b.content,b.storeTitle,l.languageTitle
+type Detail struct {
+	ContentId     int    `orm:"column(contentId)" json:"contentId"`
+	UserId        int    `orm:"column(userId)" json:"userId"`
+	LanguageId    int    `orm:"column(languageId)" json:"languageId"`
+	Content       string `orm:"column(content)" json:"content"`
+	StoreTitle    string `orm:"column(storeTitle)" json:"storeTitle"`
+	LanguageTitle string `orm:"column(languageTitle)" json:"languageTitle"`
+}
+
 func (c *MarkdownStoreModel) TableName() string {
 	return TNMarkdownStore()
 }
@@ -123,9 +133,44 @@ func (c *MarkdownStoreModel) GetList(ids []int, isBrief bool) (list []MarkdownSt
 }
 
 // 获取详情
-func (c *MarkdownStoreModel) GetDetail(userId int, languageId int, contentId int) (detail MarkdownStoreModel, err error) {
-	o := orm.NewOrm()
-	err = o.QueryTable(TNMarkdownStore()).Filter("userId", userId).Filter("languageId", languageId).Filter("contentId", contentId).One(&detail)
+func (c *MarkdownStoreModel) GetDetail(userId int, languageId int, contentId int) (detail Detail, err error) {
+	var rows []Detail
+	o := GetOrm("w")
+	sql := "select b.contentId,b.userId,b.languageId,b.content,b.storeTitle,l.languageTitle " +
+		"from markdown_store as b left join language as l on b.languageId = l.languageId " +
+		"where b.userId = ? and b.languageId = ? and b.contentId = ?;"
+
+	num, err := o.Raw(sql, userId, languageId, contentId).QueryRows(&rows)
+
+	fmt.Println(rows, num)
+
+	if len(rows) > 0 {
+		detail = rows[0]
+	}
+	return
+}
+
+// 获取上一篇文章或者下一篇文章的详情
+// 获取详情
+func (c *MarkdownStoreModel) GetLastOrNextDetail(userId int, languageId int, contentId int, artType int) (detail Detail, err error) {
+	var rows []Detail
+	o := GetOrm("w")
+	var sqlLast string
+	if artType == 1 {
+		sqlLast = "select * from markdown_store as m left join language as l on m.languageId = l.languageId " +
+			"where m.contentId < ? and m.userId = ? and m.languageId = ? order by m.contentId desc limit 1;"
+	} else {
+		sqlLast = "select * from markdown_store as m left join language as l on m.languageId = l.languageId " +
+			"where m.contentId > ? and m.userId = ? and m.languageId = ? order by m.contentId asc limit 1;"
+	}
+
+	num, err := o.Raw(sqlLast, contentId, userId, languageId).QueryRows(&rows)
+
+	fmt.Println(rows, num)
+
+	if len(rows) > 0 {
+		detail = rows[0]
+	}
 	return
 }
 
