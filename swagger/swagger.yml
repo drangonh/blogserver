@@ -1,0 +1,304 @@
+swagger: "2.0"
+info:
+  title: mobile API
+  description: mobile has every tool to get any job done, so codename for the new
+    mobile APIs.
+  version: 1.0.0
+  contact:
+    email: astaxie@gmail.com
+basePath: /blog
+paths:
+  /: {}
+  /language/editLanguage:
+    post:
+      tags:
+      - language
+      description: 语言编辑或者新增
+      operationId: Language.Edit
+      parameters:
+      - in: formData
+        name: languageTitle
+        description: 语言标题
+        required: true
+        type: string
+      - in: formData
+        name: languageContent
+        description: 语言简介
+        required: true
+        type: string
+      responses:
+        "200":
+          description: "true"
+        nil:
+          description: ""
+  /language/getLanguageList:
+    get:
+      tags:
+      - language
+      description: 语言列表
+      operationId: Language.Edit
+      responses:
+        "200":
+          description: list
+        nil:
+          description: ""
+  /markdownStore/deleteArticle:
+    post:
+      tags:
+      - markdownStore
+      description: 删除文章
+      operationId: MarkdownStore.DeletePage
+      parameters:
+      - in: formData
+        name: contentId
+        description: 文章id
+        required: true
+        type: integer
+        format: int64
+      responses:
+        "200":
+          description: "true"
+        nil:
+          description: ""
+  /markdownStore/editArticle:
+    post:
+      tags:
+      - markdownStore
+      description: 新增或者插入新的文章
+      operationId: MarkdownStore.Edit
+      parameters:
+      - in: formData
+        name: languageId
+        description: 文章ID
+        required: true
+        type: integer
+        format: int64
+      - in: formData
+        name: content
+        description: 文章内容
+        required: true
+        type: string
+      - in: formData
+        name: storeTitle
+        description: 文章标题
+        required: true
+        type: string
+      - in: formData
+        name: htmlContent
+        description: 文章内容对应的html
+        required: true
+        type: string
+      responses:
+        '{"result":':
+          description: false}
+        "200":
+          description: '{"result": true, "msg": "新增成功"}'
+  /markdownStore/getArticleDetail:
+    get:
+      tags:
+      - markdownStore
+      description: 获取详情
+      operationId: MarkdownStore.GetDetail
+      parameters:
+      - in: query
+        name: languageId
+        description: 文章ID
+        required: true
+        type: integer
+        format: int64
+      - in: query
+        name: contentId
+        description: 文章id
+        required: true
+        type: integer
+        format: int64
+      responses:
+        "200":
+          description: '{"list":  List,"count": count}'
+        nil:
+          description: ""
+  /markdownStore/getArticleList:
+    get:
+      tags:
+      - markdownStore
+      description: 查询指定用户指定分类的文章,也可以查询指定客户所有的文章
+      operationId: MarkdownStore.GetMarkdownList
+      parameters:
+      - in: query
+        name: languageId
+        description: 文章ID
+        required: true
+        type: integer
+        format: int64
+      - in: query
+        name: page
+        description: 文章第几页
+        required: true
+        type: integer
+        format: int64
+      - in: query
+        name: pageSize
+        description: 一个分页文章的文章个数
+        required: true
+        type: integer
+        format: int64
+      - in: query
+        name: isBrief
+        description: 查询简介的列表还是详情的列表，默认查询简介
+        required: true
+        type: boolean
+      responses:
+        "200":
+          description: '{"list":  List,"count": count}'
+        nil:
+          description: ""
+  /oss/editOss:
+    post:
+      tags:
+      - oss
+      description: 新增或者编辑oss信息
+      operationId: OSSController.EditInfo
+      parameters:
+      - in: formData
+        name: uid
+        description: 用户ID
+        required: true
+        type: integer
+        format: int64
+      - in: formData
+        name: endpoint
+        description: Your region:类似：oss-cn-hangzhou
+        required: true
+        type: string
+      - in: formData
+        name: accessKeyId
+        description: Your AccessKeyId
+        required: true
+        type: string
+      - in: formData
+        name: accessKeySecret
+        description: Your AccessKeySecret
+        required: true
+        type: string
+      - in: formData
+        name: bucketName
+        description: Your bucket name
+        required: true
+        type: string
+      responses:
+        "200":
+          description: "true"
+        nil:
+          description: ""
+  /oss/ossInfo:
+    get:
+      tags:
+      - oss
+      description: 获取oss信息
+      operationId: OSSController.OssInfo
+      responses:
+        "200":
+          description: "true"
+        nil:
+          description: ""
+  /profile/editUserProfile:
+    post:
+      tags:
+      - profile
+      description: 更新或者修改用户信息
+      operationId: ProfileController.EditUserProfile
+      parameters:
+      - in: formData
+        name: avatar
+        description: 用户头像
+        required: true
+        type: string
+      - in: formData
+        name: email
+        description: 用户邮箱
+        required: true
+        type: string
+      - in: formData
+        name: nickName
+        description: 用户昵称
+        required: true
+        type: string
+      - in: formData
+        name: description
+        description: 用户描述
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '{userName,password,userId}'
+        注册失败:
+          description: ""
+  /user/getArtAndCatCnt:
+    get:
+      tags:
+      - user
+      description: 根据用户id获取用户的分类总数和文章总数
+      operationId: UserController.GetArtAndCatCnt
+      responses:
+        "200":
+          description: "true"
+        nil:
+          description: ""
+  /user/login:
+    post:
+      tags:
+      - user
+      description: Logs user into the system
+      operationId: UserController.Login
+      parameters:
+      - in: formData
+        name: userName
+        description: The username for login
+        required: true
+        type: string
+      - in: formData
+        name: passWord
+        description: The password for login
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '{userName,password,userId} login success'
+        "403":
+          description: user not exist
+  /user/logout:
+    get:
+      tags:
+      - user
+      description: 退出登录,清除登录cookie和session
+      operationId: UserController.Logout
+      responses:
+        "200":
+          description: '{"res": true,"msg": "退出登录",}'
+  /user/register:
+    post:
+      tags:
+      - user
+      description: 账号注册
+      operationId: UserController.Register
+      parameters:
+      - in: formData
+        name: Username
+        description: The Username for register
+        required: true
+        type: string
+      - in: formData
+        name: Password
+        description: The Password for register
+        required: true
+        type: string
+      - in: formData
+        name: ConfirmPassword
+        description: The ConfirmPassword for register
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '{userName,password,userId}'
+        注册失败:
+          description: ""
