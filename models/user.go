@@ -11,8 +11,8 @@ import (
 
 type User struct {
 	UserId        int       `orm:"pk;auto;column(userId)" json:"userId"`
-	Username      string    `orm:"size(30);unique;column(userName)" json:"userName"`
-	Password      string    `orm:"size(50);unique;column(passWord)" json:"passWord"`
+	Username      string    `orm:"unique;column(userName)" json:"userName"`
+	Password      string    `orm:"unique;column(passWord)" json:"passWord"`
 	LastLoginTime time.Time `orm:"type(datetime);column(lastLoginTime);null" json:"lastLoginTime"`
 	//LastLoginTime time.Time `orm:"type(datetime);column(lastLoginTime)" json:"lastLoginTime"` //如果不是
 	//Profile       *Profile  `orm:"reverse(one)"` //// Reverse relationship (optional)
