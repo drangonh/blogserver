@@ -15,6 +15,10 @@ const SessionName = "blog_server"
 // cookie过期时间设置
 const CookieMastLiftTime = 3600 * 24
 
+// docker相关
+const ESIndex = "blog_server1"
+const ESType = "markdown_1"
+
 // app_key
 func AppKey() string {
 	return beego.AppConfig.DefaultString("app_key", "blog_secret")
