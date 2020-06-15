@@ -40,6 +40,11 @@ func init() {
 				&controllers.OSSController{},
 			),
 		),
+		beego.NSNamespace("/search",
+			beego.NSInclude(
+				&controllers.ElasticSearchController{},
+			),
+		),
 	)
 	beego.AddNamespace(ns)
 }

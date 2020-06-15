@@ -26,7 +26,7 @@ func (m *MarkdownStore) URLMapping() {
 }
 
 // @Title Edit
-// @Description 新增或者插入新的文章
+// @Description 更新或者插入新的文章
 // @Param languageId formData int true "文章ID"
 // @Param content formData string  true "文章内容"
 // @Param storeTitle formData string  true "文章标题"
@@ -39,11 +39,20 @@ func (m *MarkdownStore) Edit() {
 	data := m.Ctx.Input.RequestBody
 	json.Unmarshal(data, store) //解析二进制json，把结果放进ob中
 	store.UserId = m.User.UserId
-	err := store.Edit("content", "htmlContent", "storeTitle", "brief", "languageId")
+	one, id, err := store.Edit("content", "htmlContent", "storeTitle", "brief", "languageId")
 	if nil != err {
 		m.Data["json"] = common.ResultHandle(map[string]bool{"result": false}, err)
 	} else {
-		m.Data["json"] = common.ResultHandle(map[string]interface{}{"result": true, "msg": "新增成功"}, err)
+		go func() {
+			fmt.Println("ES插入数据开始：：：：：", id)
+			models.AddDocumentToIndex(int(id), m.User.UserId, one.LanguageId, one.Content)
+		}()
+
+		if one.ContentId > 0 {
+			m.Data["json"] = common.ResultHandle(map[string]interface{}{"result": true, "msg": "修改文章成功"}, err)
+		} else {
+			m.Data["json"] = common.ResultHandle(map[string]interface{}{"result": true, "msg": "新增文章成功"}, err)
+		}
 	}
 	m.ServeJSON()
 }
@@ -90,17 +99,22 @@ func (m *MarkdownStore) GetMarkdownList() {
 			}
 		}
 
-		List, err := models.NewMarkdownStore().GetList(contentIds, isBrief)
+		if len(contentIds) > 0 {
+			List, err := models.NewMarkdownStore().GetList(contentIds, isBrief)
 
-		if err != nil {
-			m.Data["json"] = common.ResultHandle(nil, err)
+			if err != nil {
+				m.Data["json"] = common.ResultHandle(nil, err)
+			} else {
+				m.Data["json"] = common.ResultHandle(
+					map[string]interface{}{
+						"list":  List,  //分页的列表
+						"count": count, //文章总数
+					}, nil)
+			}
 		} else {
-			m.Data["json"] = common.ResultHandle(
-				map[string]interface{}{
-					"list":  List,  //分页的列表
-					"count": count, //文章总数
-				}, nil)
+			m.Data["json"] = common.ResultHandle(nil, err)
 		}
+
 	}
 
 	m.ServeJSON()

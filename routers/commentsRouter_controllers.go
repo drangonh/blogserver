@@ -7,6 +7,15 @@ import (
 
 func init() {
 
+	beego.GlobalControllerRouter["blogserver/controllers:ElasticSearchController"] = append(beego.GlobalControllerRouter["blogserver/controllers:ElasticSearchController"],
+		beego.ControllerComments{
+			Method:           "SearchResult",
+			Router:           `/searchDocuments`,
+			AllowHTTPMethods: []string{"get"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
 	beego.GlobalControllerRouter["blogserver/controllers:HomeController"] = append(beego.GlobalControllerRouter["blogserver/controllers:HomeController"],
 		beego.ControllerComments{
 			Method:           "Index",

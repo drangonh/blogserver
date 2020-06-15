@@ -20,15 +20,15 @@ func NewLanguage() *LanguageModel {
 	return &LanguageModel{}
 }
 
-func (c *LanguageModel) Edit(str ...string) (err error) {
+func (c *LanguageModel) Edit(str ...string) (id int64, err error) {
 	o := orm.NewOrm()
 	var one LanguageModel
 	o.QueryTable(TNLanguage()).Filter("languageId", c.LanguageId).One(&one)
 
 	if one.LanguageId > 0 {
-		_, err = o.Update(c, str...)
+		id, err = o.Update(c, str...)
 	} else {
-		_, err = o.Insert(c)
+		id, err = o.Insert(c)
 	}
 	return
 }
@@ -36,6 +36,13 @@ func (c *LanguageModel) Edit(str ...string) (err error) {
 func (c *LanguageModel) GetList(id string) (list []LanguageModel, err error) {
 	o := orm.NewOrm()
 	_, err = o.QueryTable(TNLanguage()).Filter("userId", id).All(&list)
+
+	return
+}
+
+func (c *LanguageModel) GetOne(id string, languageId string) (detail LanguageModel, err error) {
+	o := orm.NewOrm()
+	err = o.QueryTable(TNLanguage()).Filter("userId", id).Filter("languageId", languageId).One(&detail)
 
 	return
 }

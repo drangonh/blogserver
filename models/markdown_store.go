@@ -35,10 +35,9 @@ func NewMarkdownStore() *MarkdownStoreModel {
 	return &MarkdownStoreModel{}
 }
 
-func (c *MarkdownStoreModel) Edit(str ...string) (err error) {
+func (c *MarkdownStoreModel) Edit(str ...string) (one MarkdownStoreModel, id int64, err error) {
 	o := orm.NewOrm()
-	var one MarkdownStoreModel
-	o.QueryTable(TNMarkdownStore()).Filter("contentId", c.ContentId).One(&one)
+	//o.QueryTable(TNMarkdownStore()).Filter("contentId", c.ContentId).One(&one)
 
 	// 直接截取字符串可能出现截取了字符串中一个字符的部分字节，截取字符串最后的部分乱码。最终
 	// 导致出现程序异常
@@ -51,14 +50,15 @@ func (c *MarkdownStoreModel) Edit(str ...string) (err error) {
 		c.Brief = string(arr)
 	}
 
-	fmt.Println("简介：：：", c.Brief)
-	if one.ContentId > 0 {
+	//fmt.Println("简介：：：", c.Brief)
+	if c.ContentId > 0 {
 		_, err = o.Update(c, str...)
+		id = int64(c.ContentId)
 	} else {
-		_, err = o.Insert(c)
+		id, err = o.Insert(c)
 	}
 
-	return
+	return *c, id, err
 }
 
 //分页查询第一步：查询总数和对应分页的contentId数组
@@ -140,9 +140,9 @@ func (c *MarkdownStoreModel) GetDetail(userId int, languageId int, contentId int
 		"from markdown_store as b left join language as l on b.languageId = l.languageId " +
 		"where b.userId = ? and b.languageId = ? and b.contentId = ?;"
 
-	num, err := o.Raw(sql, userId, languageId, contentId).QueryRows(&rows)
+	_, err = o.Raw(sql, userId, languageId, contentId).QueryRows(&rows)
 
-	fmt.Println(rows, num)
+	//fmt.Println(rows, num)
 
 	if len(rows) > 0 {
 		detail = rows[0]
@@ -164,9 +164,9 @@ func (c *MarkdownStoreModel) GetLastOrNextDetail(userId int, languageId int, con
 			"where m.contentId > ? and m.userId = ? and m.languageId = ? order by m.contentId asc limit 1;"
 	}
 
-	num, err := o.Raw(sqlLast, contentId, userId, languageId).QueryRows(&rows)
+	_, err = o.Raw(sqlLast, contentId, userId, languageId).QueryRows(&rows)
 
-	fmt.Println(rows, num)
+	//fmt.Println(rows, num)
 
 	if len(rows) > 0 {
 		detail = rows[0]

@@ -45,11 +45,15 @@ func (m *Language) Edit() {
 
 	language.UserId = m.User.UserId
 
-	err := language.Edit("languageContent", "languageTitle")
+	id, err := language.Edit("languageContent", "languageTitle")
 	if nil != err {
 		fmt.Println(err)
 		m.Data["json"] = common.ResultHandle(map[string]bool{"result": true}, err)
 	} else {
+		fmt.Println("文章ID：：：：", id)
+		go func() {
+			models.ElasticBuildIndex(string(m.User.UserId), string(id))
+		}()
 		m.Data["json"] = common.ResultHandle(map[string]interface{}{"result": true, "msg": "新增成功"}, err)
 	}
 	m.ServeJSON()
