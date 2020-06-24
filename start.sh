@@ -1,3 +1,3 @@
 #!/bin/sh
-bee run main
+bee run main.go
 done
