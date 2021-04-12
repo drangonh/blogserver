@@ -22,7 +22,6 @@ func main() {
 	//	//如果设置，则允许共享身份验证凭据，例如cookie
 	//	AllowCredentials: true,
 	//}))
-
 	// 这段代码放在router.go文件的init()的开头
 	beego.InsertFilter("*", beego.BeforeRouter, cors.Allow(&cors.Options{
 		AllowAllOrigins: true,
