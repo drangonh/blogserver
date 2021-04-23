@@ -2,7 +2,7 @@
 FROM golang:1.14.2
 ## 定义环境变量
 ENV GOROOT=/usr/local/go
-ENV GOPATH=/Users/liudong/Desktop/git/go
+ENV GOPATH=/Users/mac/Desktop/git/drag/go
 ENV PATH=$GOPATH/bin/:$PATH
 ## 首先安装 beego 和 bee 工具和 mysql 扩展
 RUN go get github.com/astaxie/beego && go get github.com/beego/bee && go get github.com/go-sql-driver/mysql
