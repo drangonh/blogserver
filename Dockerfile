@@ -9,7 +9,7 @@ ENV GOPATH=$GOPATH
 ENV PATH=$GOPATH/bin/:$PATH
 
 ## 首先安装 beego 和 bee 工具和 mysql 扩展
-RUN go get github.com/astaxie/beego && go get github.com/beego/bee && go get github.com/go-sql-driver/mysql && github.com/russross/blackfriday && github.com/nfnt/resize && github.com/PuerkitoBio/goquery && github.com/aliyun/aliyun-oss-go-sdk/oss && github.com/bitly/go-simplejson && github.com/olivere/elastic && golang.org/x/net
+RUN go get github.com/astaxie/beego && go get github.com/beego/bee && go get github.com/go-sql-driver/mysql && go get github.com/russross/blackfriday && go get github.com/nfnt/resize && go get github.com/PuerkitoBio/goquery && go get github.com/aliyun/aliyun-oss-go-sdk/oss && go get github.com/bitly/go-simplejson && go get github.com/olivere/elastic && go get golang.org/x/net
 
 ## 复制Dockerfile 同目录的所有文件到docker 中的指定位置
 COPY . /www/go/src/blogserver/
