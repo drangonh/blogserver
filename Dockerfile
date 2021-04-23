@@ -10,7 +10,7 @@ ENV PATH=$GOPATH/bin/:$PATH
 
 ## 首先安装 beego 和 bee 工具和 mysql 扩展
 RUN go get github.com/astaxie/beego
-RUN go get google.golang.org/protobuf
+RUN git clone https://github.com/golang/protobuf.git $GOPATH/src/google.golang.org/protobuf
 RUN go get github.com/beego/bee
 RUN go get github.com/go-sql-driver/mysql
 RUN go get github.com/russross/blackfriday
