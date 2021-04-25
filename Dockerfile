@@ -37,4 +37,8 @@ EXPOSE 3000
 ## 启动执行 bee run  命令
 CMD ["bee", "run"]
 
+
 #docker run -it --name blog-instance -p 3000:3000  -v  /Users/mac/Desktop/git/drag/go/src/blogserver:/go/src/blogserver -w /go/src/blogserver blogserver
+
+
+#docker run -it --name blog-instance -p 3000:3000  -v  /pro/go/src/blogserver:/go/src/blogserver -w /go/src/blogserver blogserver
